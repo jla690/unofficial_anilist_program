@@ -6,7 +6,7 @@ import os
 from urllib.parse import quote
 
 login_url = "https://anilist.co/api/v2/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
-url = 'https://graphql.anilist.co'
+graphql_url = 'https://graphql.anilist.co'
 token_url = "https://anilist.co/api/v2/oauth/token"
 file_path = 'data.json'
 client_id = int(os.getenv("ANILIST_CLIENT_ID", "30162"))
@@ -45,13 +45,25 @@ def build_login_url():
 
 def api_call():
     try:
-        return requests.post(url, json={'query': list_from_user_query, 'variables': variables})
+        token = authorization()
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json',
+			'Accept': 'application/json'
+        }
+        return requests.post(graphql_url, json={'query': list_from_user_query, 'variables': variables}, headers=headers)
     except:
         print("Error with POST request")
 
 def token_conversion(code):
-    response = requests.post(token_url, json={'grant_type': 'authorization_code', 'client_id': client_id, 'client_secret': client_secret, 'redirect_uri': redirect_uri, 'code': code})
-    print(response.text)
+    response = requests.post(token_url, json={
+        'grant_type': 'authorization_code',
+        'client_id': client_id, 
+        'client_secret': client_secret, 
+        'redirect_uri': redirect_uri, 
+        'code': code})
+    json_object = json.loads(response.text)
+    return json_object["access_token"]
 
 def file_writing(obj):
     if obj is None:
@@ -66,27 +78,25 @@ def authorization():
     code = input("Enter code\n")
     code = code.strip()
     token = token_conversion(code)
+    return token
 
 def main():
-    authorization()
-
-
-    # all_titles = []
+    all_titles = []
     
-    # json_object = None
-    # response = api_call()
-    # try:
-    #     json_object = json.loads(response.text)
-    # except:
-    #     print("Error parsing text")
-    #     exit(1)
+    json_object = None
+    response = api_call()
+    try:
+        json_object = json.loads(response.text)
+    except:
+        print("Error parsing text")
+        exit(1)
 
-    # file_writing(json_object)
-    # for arr in json_object["data"]["MediaListCollection"]["lists"]:
-    #     for entry in arr["entries"]:
-    #         all_titles.append(entry["media"])
+    file_writing(json_object)
+    for arr in json_object["data"]["MediaListCollection"]["lists"]:
+        for entry in arr["entries"]:
+            all_titles.append(entry["media"])
     
-    # print(random.choice(all_titles))
+    print(random.choice(all_titles))
 
 if __name__ == '__main__':
     main()
