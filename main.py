@@ -1,10 +1,12 @@
-import random
-import time
 import json
-import webbrowser
 import os
-from dotenv import load_dotenv
+import random
+import re
+import time
+import webbrowser
+
 import requests
+from dotenv import load_dotenv
 
 load_dotenv()
 LOGIN_URL = "https://anilist.co/api/v2/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
@@ -109,6 +111,7 @@ def token_conversion(code):
 def add_map(key, value):
     variables[key] = value
 
+
 def file_writing(obj):
     if obj is None:
         print("JSON object is empty")
@@ -122,6 +125,8 @@ def get_token_from_file():
         return None
     with open(TOKEN_PATH) as f:
         token = json.load(f)
+
+        # verify expiration
         if time.time() >= token["expiration_time"]:
             return None
         return token
@@ -135,14 +140,17 @@ def save_token(token):
     with open(TOKEN_PATH, "w") as f:
         json.dump(token, f, indent=2)
 
+
 def authorization():
     token = get_token_from_file()
     if token:
         return token["access_token"]
+
     auth_url = build_login_url()
     webbrowser.open(auth_url, new=0, autoraise=True)
     code = input("Enter code\n")
     code = code.strip()
+
     json_object = token_conversion(code)
     save_token(json_object)
     return json_object["access_token"]
@@ -160,6 +168,11 @@ def get_random_manga(json_object):
 
 
 def get_recommendations(json_object):
+    # no recommendations found
+    if len(json_object["data"]["Media"]["recommendations"]["edges"]) == 0:
+        print("No recommendations found for: ", json_object["data"]["Media"]["title"])
+        return
+
     for edge in json_object["data"]["Media"]["recommendations"]["edges"]:
         print(
             json.dumps(
@@ -171,8 +184,14 @@ def get_recommendations(json_object):
 def main():
     print("Which query to run?")
     choice = input("1. Recommendation\n2. Random manga from your list\n")
+
+    # use regex to remove non numbers
+    choice = re.sub("[^0-9]", "", choice)
+    print(choice)
     response = None
     json_object = None
+
+    # definitely can be refactored
     if choice == "1":
         search = input("Title of Manga: ")
         add_map("search", search)
