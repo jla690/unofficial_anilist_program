@@ -1,9 +1,12 @@
+# pylint: disable=missing-function-docstring, missing-module-docstring
+
 import json
 import os
 import random
 import re
 import time
 import webbrowser
+import pandas as pd
 
 import requests
 from dotenv import load_dotenv
@@ -25,17 +28,15 @@ query ($search: String!) {
     title {
       romaji 
     }
-    recommendations(perPage: 20, sort: RATING_DESC) {
+    recommendations(perPage: 5, sort: RATING_DESC) {
       edges {
         node {
           mediaRecommendation {
             id
             averageScore
-            popularity
             title {
               romaji native english
                 }
-            genres
           }
         }
       }
@@ -68,6 +69,10 @@ query ($type: MediaType!, $userId: Int!) {
 
 variables = {"type": "MANGA", "userId": 7483344}
 
+def initialize_pandas():
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
+    pd.set_option('display.max_colwidth', 30)
 
 def build_login_url():
     return LOGIN_URL.format(client_id=client_id, redirect_uri=REDIRECT_URL)
@@ -90,6 +95,7 @@ def api_call(query):
         return response
     except requests.RequestException as e:
         print(f"Error with POST request: {e}")
+        return None
 
 
 def token_conversion(code):
@@ -164,24 +170,23 @@ def get_random_manga(json_object):
 
     random_choice = random.choice(all_titles)
     print("\n-----------------------")
-    print("Random Pick: ", json.dumps(random_choice, ensure_ascii=False, indent=2))
+    print("Random Pick: ", pd.json_normalize(random_choice))
 
 
-def get_recommendations(json_object):
+def get_recommendations(json_object: dict):
     # no recommendations found
-    if len(json_object["data"]["Media"]["recommendations"]["edges"]) == 0:
+    edges = json_object["data"]["Media"]["recommendations"]["edges"]
+    if len(edges) == 0:
         print("No recommendations found for: ", json_object["data"]["Media"]["title"])
         return
 
-    for edge in json_object["data"]["Media"]["recommendations"]["edges"]:
-        print(
-            json.dumps(
-                edge["node"]["mediaRecommendation"], ensure_ascii=False, indent=2
-            )
-        )
+    for edge in edges:
+        media_rec = edge["node"]["mediaRecommendation"]
+        print(pd.json_normalize(media_rec))
 
 
 def main():
+    initialize_pandas()
     print("Which query to run?")
     choice = input("1. Recommendation\n2. Random manga from your list\n")
 
