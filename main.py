@@ -3,14 +3,16 @@ import time
 import json
 import webbrowser
 import os
+from dotenv import load_dotenv
 import requests
 
+load_dotenv()
 LOGIN_URL = "https://anilist.co/api/v2/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
 GRAPHQL_URL = "https://graphql.anilist.co"
 TOKEN_URL = "https://anilist.co/api/v2/oauth/token"
 FILE_PATH = "data.json"
-client_id = int(os.getenv("ANILIST_CLIENT_ID", ""))
-client_secret = os.getenv("ANILIST_CLIENT_SECRET", "")
+client_id = int(os.getenv("ANILIST_CLIENT_ID"))
+client_secret = os.getenv("ANILIST_CLIENT_SECRET")
 REDIRECT_URL = "https://anilist.co/api/v2/oauth/pin"
 TOKEN_PATH = "token.json"
 
