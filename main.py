@@ -1,4 +1,5 @@
 import random
+import time
 import requests
 import json
 import webbrowser
@@ -12,6 +13,7 @@ file_path = 'data.json'
 client_id = int(os.getenv("ANILIST_CLIENT_ID", "30162"))
 client_secret = os.getenv("ANILIST_CLIENT_SECRET", "")
 redirect_uri = "https://anilist.co/api/v2/oauth/pin"
+token_path = 'token.json'
 list_from_user_query = '''
 query ($type: MediaType!, $userId: Int!) {
   MediaListCollection(type: $type, userId: $userId) {
@@ -62,8 +64,8 @@ def token_conversion(code):
         'client_secret': client_secret, 
         'redirect_uri': redirect_uri, 
         'code': code})
-    json_object = json.loads(response.text)
-    return json_object["access_token"]
+    json_object = response.json()
+    return json_object
 
 def file_writing(obj):
     if obj is None:
@@ -72,31 +74,55 @@ def file_writing(obj):
     with open('data.json', 'w') as f:
         json.dump(obj, f, ensure_ascii=False, indent=2)
 
+def get_token_from_file():
+    if not os.path.exists(token_path):
+        return None
+    with open(token_path) as f:
+        token = json.load(f)
+        if time.time() >= token["expiration_time"]:
+            return None
+        return token
+
+def save_token(token):
+    if token is None:
+        print("Can't save None token")
+        return
+    token["expiration_time"] = time.time() + token["expires_in"]
+    with open(token_path, 'w') as f:
+        json.dump(token, f, indent=2)
+
 def authorization():
+    token = get_token_from_file()
+    if token:
+        return token["access_token"]
     auth_url = build_login_url()
     webbrowser.open(auth_url, new=0, autoraise=True)
     code = input("Enter code\n")
     code = code.strip()
-    token = token_conversion(code)
-    return token
+    json_object = token_conversion(code)
+    save_token(json_object)
+    return json_object["access_token"]
+
+def get_random_manga(json_object):
+    all_titles = []
+    for arr in json_object["data"]["MediaListCollection"]["lists"]:
+        for entry in arr["entries"]:
+            all_titles.append(entry["media"])
+    
+    random_choice = random.choice(all_titles)
+    print("Random Pick: ", json.dumps(random_choice, ensure_ascii=False, indent=2))
 
 def main():
-    all_titles = []
-    
     json_object = None
     response = api_call()
     try:
-        json_object = json.loads(response.text)
+        json_object = response.json()
     except:
         print("Error parsing text")
         exit(1)
 
     file_writing(json_object)
-    for arr in json_object["data"]["MediaListCollection"]["lists"]:
-        for entry in arr["entries"]:
-            all_titles.append(entry["media"])
-    
-    print(random.choice(all_titles))
+    get_random_manga(json_object)
 
 if __name__ == '__main__':
     main()
