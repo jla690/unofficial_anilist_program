@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %}AniList Local{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="stylesheet" href="/static/css/styles.css">
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <a href="/" class="logo">AniList<span class="accent">Local</span></a>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="/search">Search</a></li>
+        <li><a href="/lists">My Lists</a></li>
+        {% if user %}
+          <li class="user-block">
+            {% if user.avatar.medium %}
+              <img src="{{ user.avatar.medium }}" alt="{{ user.name }}" class="avatar">
+            {% endif %}
+            <span class="username">{{ user.name }}</span>
+            <a class="btn small outline" href="/auth/logout">Logout</a>
+          </li>
+        {% else %}
+          <li><a class="btn primary small" href="/auth/login">Login</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle color theme">
+      <span class="icon">🌓</span>
+    </button>
+  </header>
+
+  <div class="layout">
+    <main class="content">
+      {% if messages %}
+        <div class="messages">
+          {% for m in messages %}
+            <div class="message {{ m.category|default('info') }}">{{ m.text }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+    <aside class="sidebar">
+      {% block sidebar %}
+      <section class="panel">
+        <h3>Status</h3>
+        {% if user %}
+          <p>Logged in as <strong>{{ user.name }}</strong></p>
+        {% else %}
+          <p>You are not logged in.</p>
+        {% endif %}
+      </section>
+      {% endblock %}
+    </aside>
+  </div>
+
+  <script>
+    (function() {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const stored = localStorage.getItem('theme');
+      if (stored) root.setAttribute('data-theme', stored);
+      btn?.addEventListener('click', () => {
+        const current = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', current);
+        localStorage.setItem('theme', current);
+      });
+    })();
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

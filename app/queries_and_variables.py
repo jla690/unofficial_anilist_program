@@ -11,15 +11,30 @@ import requests
 from dotenv import load_dotenv
 
 load_dotenv()
-LOGIN_URL = ("https://anilist.co/api/v2/oauth/authorize?client_id={client_id}"
-             "&redirect_uri={redirect_uri}&response_type=code")
+LOGIN_URL = (
+    "https://anilist.co/api/v2/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code")
 GRAPHQL_URL = "https://graphql.anilist.co"
 TOKEN_URL = "https://anilist.co/api/v2/oauth/token"
-FILE_PATH = "data.json"
+FILE_PATH = "../data.json"
 client_id = int(os.getenv("ANILIST_CLIENT_ID"))
 client_secret = os.getenv("ANILIST_CLIENT_SECRET")
-REDIRECT_URL = "https://anilist.co/api/v2/oauth/pin"
-TOKEN_PATH = "token.json"
+SECRET_KEY = os.getenv("SECRET_KEY")
+REDIRECT_URL = "http://localhost:8000/auth/callback"
+TOKEN_PATH = "../token.json"
+
+USER_QUERY = """
+query {
+  Viewer {
+    id
+    name
+    avatar {
+      medium
+    }
+    bannerImage
+    about
+  }
+}
+"""
 
 CHARACTER_QUERY = """
 query ($search: String!) {
@@ -104,6 +119,11 @@ def build_login_url():
     return LOGIN_URL.format(client_id=client_id, redirect_uri=REDIRECT_URL)
 
 
+def get_logged_in_user():
+    response = api_call(USER_QUERY).json()
+    return response["data"]["Viewer"]
+
+
 def api_call(query):
     try:
         token = authorization()
@@ -148,7 +168,7 @@ def file_writing(obj):
     if obj is None:
         print("JSON object is empty")
         return
-    with open("data.json", "w") as f:
+    with open("../data.json", "w") as f:
         json.dump(obj, f, ensure_ascii=False, indent=2)
 
 
@@ -188,16 +208,23 @@ def authorization():
     return json_object["access_token"]
 
 
-def get_random_manga(json_object):
+def get_all_manga(json_object):
     all_titles = []
     arrays = json_object["data"]["MediaListCollection"]["lists"]
     for arr in arrays:
         for entry in arr["entries"]:
             all_titles.append(entry["media"])
 
+    return json_object["data"]["MediaListCollection"]["lists"]
+
+
+def get_random_manga(json_object):
+    all_titles = get_all_manga(json_object)
+
     df = pd.json_normalize(all_titles)
     random_row = df.sample(n=1).to_markdown(index=False)
     print(random_row)
+    return random_row
 
 
 def get_recommendations(json_object: dict):
@@ -214,9 +241,7 @@ def get_recommendations(json_object: dict):
 
 def get_characters(json_object):
     edges = json_object["data"]["Media"]["characters"]["edges"]
-    title = json_object["data"]["Media"]["title"]
-    print_markdown(title)
-    print_markdown(edges)
+    return edges
 
 
 def handle_recommendations():
@@ -228,12 +253,17 @@ def handle_recommendations():
     return json_object
 
 
+def handle_all_manga():
+    response = api_call(LIST_FROM_USER_QUERY)
+    json_object = response.json()
+    formatted = get_all_manga(json_object)
+    return formatted
+
 def handle_random_manga():
     response = api_call(LIST_FROM_USER_QUERY)
     json_object = response.json()
-    get_random_manga(json_object)
-    return json_object
-
+    formatted = get_random_manga(json_object)
+    return formatted
 
 def handle_characters():
     search = input("Title of Manga: ")
@@ -245,23 +275,26 @@ def handle_characters():
 
 
 def main():
-    initialize_pandas()
-    print("Which query to run?")
-    choice = input("1. Recommendation\n2. Random manga from your list\n3. Characters from Manga\n")
-
-    # use regex to remove non numbers
-    choice = re.sub("[^0-9]", "", choice)
-    print(choice)
-    json_object = None
-
-    if choice == "1":
-        json_object = handle_recommendations()
-    elif choice == "2":
-        json_object = handle_random_manga()
-    elif choice == "3":
-        json_object = handle_characters()
-
-    file_writing(json_object)
+    obj = handle_all_manga()
+    print(obj)
+    file_writing(obj)
+    # initialize_pandas()
+    # print("Which query to run?")
+    # choice = input("1. Recommendation\n2. Random manga from your list\n3. Characters from Manga\n")
+    #
+    # # use regex to remove non numbers
+    # choice = re.sub("[^0-9]", "", choice)
+    # print(choice)
+    # json_object = None
+    #
+    # if choice == "1":
+    #     json_object = handle_recommendations()
+    # elif choice == "2":
+    #     json_object = handle_random_manga()
+    # elif choice == "3":
+    #     json_object = handle_characters()
+    #
+    # file_writing(json_object)
 
 
 if __name__ == "__main__":

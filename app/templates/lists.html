@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}My Lists | AniList Local{% endblock %}
+{% block content %}
+<h2>My Lists</h2>
+<div class="tabs">
+  <a href="/lists?type=ANIME" class="tab {% if type != 'MANGA' %}active{% endif %}">Anime</a>
+  <a href="/lists?type=MANGA" class="tab {% if type == 'MANGA' %}active{% endif %}">Manga</a>
+</div>
+{% if lists %}
+  {% for L in lists %}
+    <section class="list-section">
+      <h3>{{ L.name }}</h3>
+      <table class="media-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Progress</th>
+            <th>Score</th>
+            <th>Status</th>
+            <th>Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for e in L.entries %}
+          <tr>
+            <td class="title-cell">
+              <a href="/media/{{ e.media.id }}">
+                {{ e.title.romaji or e.title.english or e.title.native }}
+              </a>
+            </td>
+            <td>
+              {{ e.progress }}{% if e.media.episodes %}/{{ e.media.episodes }}{% endif %}
+              {% if e.progressVolumes is defined and e.progressVolumes %}
+                <div class="muted small">Vol: {{ e.progressVolumes }}{% if e.media.volumes %}/{{ e.media.volumes }}{% endif %}</div>
+              {% endif %}
+            </td>
+            <td>{{ e.score or '—' }}</td>
+            <td><span class="status badge status-{{ e.status|lower }}">{{ e.status }}</span></td>
+            <td>
+              {% if e.updatedAt %}
+                {{ e.updatedAt|datetime }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  {% endfor %}
+{% else %}
+  <p class="muted">No list data available.</p>
+{% endif %}
+{% endblock %}
