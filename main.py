@@ -2,17 +2,17 @@
 
 import json
 import os
-import random
 import re
 import time
 import webbrowser
-import pandas as pd
 
+import pandas as pd
 import requests
 from dotenv import load_dotenv
 
 load_dotenv()
-LOGIN_URL = "https://anilist.co/api/v2/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+LOGIN_URL = ("https://anilist.co/api/v2/oauth/authorize?client_id={client_id}"
+             "&redirect_uri={redirect_uri}&response_type=code")
 GRAPHQL_URL = "https://graphql.anilist.co"
 TOKEN_URL = "https://anilist.co/api/v2/oauth/token"
 FILE_PATH = "data.json"
@@ -89,13 +89,16 @@ query ($type: MediaType!, $userId: Int!) {
 
 variables = {"type": "MANGA", "userId": 7483344}
 
+
 def print_markdown(json_object):
     print(pd.json_normalize(json_object).to_markdown(index=False))
+
 
 def initialize_pandas():
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', None)
     pd.set_option('display.max_colwidth', None)
+
 
 def build_login_url():
     return LOGIN_URL.format(client_id=client_id, redirect_uri=REDIRECT_URL)
@@ -196,6 +199,7 @@ def get_random_manga(json_object):
     random_row = df.sample(n=1).to_markdown(index=False)
     print(random_row)
 
+
 def get_recommendations(json_object: dict):
     # no recommendations found
     edges = json_object["data"]["Media"]["recommendations"]["edges"]
@@ -214,6 +218,32 @@ def get_characters(json_object):
     print_markdown(title)
     print_markdown(edges)
 
+
+def handle_recommendations():
+    search = input("Title of Manga: ")
+    add_map("search", search)
+    response = api_call(RECOMMENDATIONS_QUERY)
+    json_object = response.json()
+    get_recommendations(json_object)
+    return json_object
+
+
+def handle_random_manga():
+    response = api_call(LIST_FROM_USER_QUERY)
+    json_object = response.json()
+    get_random_manga(json_object)
+    return json_object
+
+
+def handle_characters():
+    search = input("Title of Manga: ")
+    add_map("search", search)
+    response = api_call(CHARACTER_QUERY)
+    json_object = response.json()
+    get_characters(json_object)
+    return json_object
+
+
 def main():
     initialize_pandas()
     print("Which query to run?")
@@ -222,26 +252,14 @@ def main():
     # use regex to remove non numbers
     choice = re.sub("[^0-9]", "", choice)
     print(choice)
-    response = None
     json_object = None
 
-    # definitely can be refactored
     if choice == "1":
-        search = input("Title of Manga: ")
-        add_map("search", search)
-        response = api_call(RECOMMENDATIONS_QUERY)
-        json_object = response.json()
-        get_recommendations(json_object)
+        json_object = handle_recommendations()
     elif choice == "2":
-        response = api_call(LIST_FROM_USER_QUERY)
-        json_object = response.json()
-        get_random_manga(json_object)
+        json_object = handle_random_manga()
     elif choice == "3":
-        search = input("Title of Manga: ")
-        add_map("search", search)
-        response = api_call(CHARACTER_QUERY)
-        json_object = response.json()
-        get_characters(json_object)
+        json_object = handle_characters()
 
     file_writing(json_object)
 
