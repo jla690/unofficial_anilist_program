@@ -76,9 +76,44 @@ async def lists(request: Request):
             "lists": all_manga,
             "user": get_current_user(request),
             "messages": [],
+            "type": "MANGA",
             "now": __import__("datetime").datetime.utcnow
         }
     )
+
+
+@app.get("/anime_detail/{media_id}", response_class=HTMLResponse)
+async def anime_detail(request: Request, media_id: int):
+    # You'll need to create a function to get media details by ID
+    # For now, using placeholder data
+    media_data = {
+        "id": media_id,
+        "title": {
+            "romaji": "Sample Title",
+            "english": "Sample Title EN",
+            "native": "サンプル"
+        },
+        "averageScore": 85,
+        "status": "FINISHED",
+        "type": "MANGA",
+        "format": "MANGA",
+        "description": "Sample description",
+        "coverImage": {
+            "extraLarge": "https://example.com/cover.jpg"
+        },
+        "siteUrl": f"https://anilist.co/manga/{media_id}"
+    }
+
+    return templates.TemplateResponse(
+        "anime_detail.html",
+        {
+            "request": request,
+            "media": media_data,
+            "user": get_current_user(request),
+            "messages": []
+        }
+    )
+
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)

@@ -95,7 +95,11 @@ query ($type: MediaType!, $userId: Int!) {
             romaji
             native
           }
+          chapters
         }
+        progress
+        status
+        score
       }
     }
   }
@@ -213,9 +217,9 @@ def get_all_manga(json_object):
     arrays = json_object["data"]["MediaListCollection"]["lists"]
     for arr in arrays:
         for entry in arr["entries"]:
-            all_titles.append(entry["media"])
+            all_titles.append(entry)
 
-    return json_object["data"]["MediaListCollection"]["lists"]
+    return all_titles
 
 
 def get_random_manga(json_object):

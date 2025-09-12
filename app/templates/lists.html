@@ -3,53 +3,46 @@
 {% block content %}
 <h2>My Lists</h2>
 <div class="tabs">
-  <a href="/lists?type=ANIME" class="tab {% if type != 'MANGA' %}active{% endif %}">Anime</a>
-  <a href="/lists?type=MANGA" class="tab {% if type == 'MANGA' %}active{% endif %}">Manga</a>
+    <a href="/lists?type=ANIME" class="tab {% if type != 'MANGA' %}active{% endif %}">Anime</a>
+    <a href="/lists?type=MANGA" class="tab {% if type == 'MANGA' %}active{% endif %}">Manga</a>
 </div>
 {% if lists %}
-  {% for L in lists %}
-    <section class="list-section">
-      <h3>{{ L.name }}</h3>
-      <table class="media-table">
+<section class="list-section">
+    <h3>All Manga</h3>
+    <table class="media-table">
         <thead>
-          <tr>
+        <tr>
             <th>Title</th>
-            <th>Progress</th>
-            <th>Score</th>
-            <th>Status</th>
-            <th>Updated</th>
-          </tr>
+            <th>Site Score</th>
+            <th>Current Chapter</th>
+            <th>User Score</th>
+            <th>Current Status</th>
+        </tr>
         </thead>
         <tbody>
-        {% for e in L.entries %}
-          <tr>
+        {% for item in lists %}
+        <tr>
             <td class="title-cell">
-              <a href="/media/{{ e.media.id }}">
-                {{ e.title.romaji or e.title.english or e.title.native }}
-              </a>
+                <a href="/anime_detail">
+                    {{ item.media.title.romaji or item.media.title.english or item.media.title.native }}
+                </a>
+            </td>
+            <td>{{ item.media.averageScore or '—' }}</td>
+            <td>
+                {{ item.progress }}
             </td>
             <td>
-              {{ e.progress }}{% if e.media.episodes %}/{{ e.media.episodes }}{% endif %}
-              {% if e.progressVolumes is defined and e.progressVolumes %}
-                <div class="muted small">Vol: {{ e.progressVolumes }}{% if e.media.volumes %}/{{ e.media.volumes }}{% endif %}</div>
-              {% endif %}
+                {{ item.score * 10 }}
             </td>
-            <td>{{ e.score or '—' }}</td>
-            <td><span class="status badge status-{{ e.status|lower }}">{{ e.status }}</span></td>
             <td>
-              {% if e.updatedAt %}
-                {{ e.updatedAt|datetime }}
-              {% else %}
-                —
-              {% endif %}
+                {{ item.status }}
             </td>
-          </tr>
+        </tr>
         {% endfor %}
         </tbody>
-      </table>
-    </section>
-  {% endfor %}
+    </table>
+</section>
 {% else %}
-  <p class="muted">No list data available.</p>
+<p class="muted">No list data available.</p>
 {% endif %}
 {% endblock %}
