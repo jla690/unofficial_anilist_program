@@ -21,22 +21,44 @@ client_secret = os.getenv("ANILIST_CLIENT_SECRET")
 REDIRECT_URL = "https://anilist.co/api/v2/oauth/pin"
 TOKEN_PATH = "token.json"
 
-RECOMMENDATIONS_QUERY = """
+CHARACTER_QUERY = """
 query ($search: String!) {
   Media(search: $search) {
-    id
     title {
       romaji 
     }
-    recommendations(perPage: 5, sort: RATING_DESC) {
+    characters(page: 1, sort: ROLE) {
+      edges {
+        role
+        node {
+          name {
+            full
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+RECOMMENDATIONS_QUERY = """
+query ($search: String!) {
+  Media(search: $search) {
+    title {
+      romaji 
+    }
+    recommendations(perPage: 10, sort: RATING_DESC) {
       edges {
         node {
           mediaRecommendation {
-            id
             averageScore
             title {
-              romaji native english
-                }
+              english romaji native
+            }
+            tags {
+                name
+                rank
+            }
           }
         }
       }
@@ -51,14 +73,12 @@ query ($type: MediaType!, $userId: Int!) {
     lists {
       name
       entries {
-        id
         media {
-          id
           averageScore
           title {
+            english
             romaji
             native
-            english
           }
         }
       }
@@ -69,10 +89,13 @@ query ($type: MediaType!, $userId: Int!) {
 
 variables = {"type": "MANGA", "userId": 7483344}
 
+def print_markdown(json_object):
+    print(pd.json_normalize(json_object).to_markdown(index=False))
+
 def initialize_pandas():
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', None)
-    pd.set_option('display.max_colwidth', 30)
+    pd.set_option('display.max_colwidth', None)
 
 def build_login_url():
     return LOGIN_URL.format(client_id=client_id, redirect_uri=REDIRECT_URL)
@@ -164,31 +187,37 @@ def authorization():
 
 def get_random_manga(json_object):
     all_titles = []
-    for arr in json_object["data"]["MediaListCollection"]["lists"]:
+    arrays = json_object["data"]["MediaListCollection"]["lists"]
+    for arr in arrays:
         for entry in arr["entries"]:
             all_titles.append(entry["media"])
 
-    random_choice = random.choice(all_titles)
-    print("\n-----------------------")
-    print("Random Pick: ", pd.json_normalize(random_choice))
-
+    df = pd.json_normalize(all_titles)
+    random_row = df.sample(n=1).to_markdown(index=False)
+    print(random_row)
 
 def get_recommendations(json_object: dict):
     # no recommendations found
     edges = json_object["data"]["Media"]["recommendations"]["edges"]
+    title = json_object["data"]["Media"]["title"]
+    print_markdown(title)
     if len(edges) == 0:
         print("No recommendations found for: ", json_object["data"]["Media"]["title"])
         return
 
-    for edge in edges:
-        media_rec = edge["node"]["mediaRecommendation"]
-        print(pd.json_normalize(media_rec))
+    print_markdown(edges)
 
+
+def get_characters(json_object):
+    edges = json_object["data"]["Media"]["characters"]["edges"]
+    title = json_object["data"]["Media"]["title"]
+    print_markdown(title)
+    print_markdown(edges)
 
 def main():
     initialize_pandas()
     print("Which query to run?")
-    choice = input("1. Recommendation\n2. Random manga from your list\n")
+    choice = input("1. Recommendation\n2. Random manga from your list\n3. Characters from Manga\n")
 
     # use regex to remove non numbers
     choice = re.sub("[^0-9]", "", choice)
@@ -207,6 +236,12 @@ def main():
         response = api_call(LIST_FROM_USER_QUERY)
         json_object = response.json()
         get_random_manga(json_object)
+    elif choice == "3":
+        search = input("Title of Manga: ")
+        add_map("search", search)
+        response = api_call(CHARACTER_QUERY)
+        json_object = response.json()
+        get_characters(json_object)
 
     file_writing(json_object)
 
