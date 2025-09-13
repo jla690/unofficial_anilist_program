@@ -56,6 +56,24 @@ query ($search: String!) {
 }
 """
 
+SEARCH_QUERY ="""
+query ($search: String!) {
+  Page {
+    media(search: $search, type: MANGA) {
+      id
+      title {
+        romaji
+        english
+        native
+      }
+      averageScore
+      chapters
+      status
+    }
+  }
+}
+"""
+
 RECOMMENDATIONS_QUERY = """
 query ($search: String!) {
   Media(search: $search) {
@@ -221,6 +239,14 @@ def get_all_manga(json_object):
 
     return all_titles
 
+def get_search(json_object):
+    all_titles = []
+    arrays = json_object["data"]["Page"]["media"]
+    for arr in arrays:
+        all_titles.append(arr)
+
+
+    return all_titles
 
 def get_random_manga(json_object):
     all_titles = get_all_manga(json_object)
@@ -277,9 +303,14 @@ def handle_characters():
     get_characters(json_object)
     return json_object
 
+def handle_search(search):
+    add_map("search", search)
+    response = api_call(SEARCH_QUERY)
+    return get_search(response.json())
+
 
 def main():
-    obj = handle_all_manga()
+    obj = handle_search("Attack on titan")
     print(obj)
     file_writing(obj)
     # initialize_pandas()

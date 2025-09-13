@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Login | AniList Local{% endblock %}
+{% block content %}
+<h2>Search</h2>
+<p>Search for your favourite anime/manga</p>
+<form action="/search" method="get">
+    <label>
+        <input type="text" name="search" placeholder="Search..">
+    </label>
+    <button type="submit" class="btn primary">Search</button>
+</form>
+{% if lists %}
+<section class="list-section">
+    <h3>All Manga</h3>
+    <table class="media-table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Site Score</th>
+            <th>Chapters</th>
+            <th>User Score</th>
+            <th>Current Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in lists %}
+        <tr>
+            <td class="title-cell">
+                <a href="/anime_detail">
+                    {{ item.title.romaji or item.title.english or item.title.native }}
+                </a>
+            </td>
+            <td>{{ item.averageScore or '—' }}</td>
+            <td>
+                {{ item.chapters }}
+            </td>
+            <td>
+                {{ "item.score * 10" }}
+            </td>
+            <td>
+                {{ item.status }}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% else %}
+<p class="muted">No list data available.</p>
+{% endif %}
+{% endblock %}

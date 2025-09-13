@@ -38,7 +38,6 @@ def require_auth(request: Request):
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     user_data = get_current_user(request)
-    print(user_data)
     return templates.TemplateResponse(
         "index.html",
         {
@@ -52,6 +51,23 @@ async def home(request: Request):
 @app.get("/auth/login", response_class=HTMLResponse)
 async def login(request: Request):
     return RedirectResponse(url=build_login_url())
+
+@app.get("/search", response_class=HTMLResponse)
+async def login(request: Request):
+    search_value = request.query_params.get("search")
+    search_results = None
+    if search_value:
+        search_results = handle_search(search_value)
+    return templates.TemplateResponse(
+        "search.html",
+        {
+            "request": request,
+            "user": get_current_user(request),
+            "search_value": search_value,
+            "lists": search_results,
+            "messages": []
+        }
+    )
 
 @app.get("/auth/callback")
 async def callback(request: Request):
