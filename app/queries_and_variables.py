@@ -202,8 +202,9 @@ def build_login_url():
     return LOGIN_URL.format(client_id=client_id, redirect_uri=REDIRECT_URL)
 
 
-def get_logged_in_user():
-    response = api_call(USER_QUERY).json()
+def get_logged_in_user(request):
+    token = get_current_token(request)
+    response = api_call(USER_QUERY, token).json()
     return response["data"]["Viewer"]
 
 
@@ -335,13 +336,13 @@ def get_characters(json_object):
     return edges
 
 
-def handle_recommendations():
-    search = input("Title of Manga: ")
-    add_map("search", search)
-    response = api_call(RECOMMENDATIONS_QUERY)
-    json_object = response.json()
-    get_recommendations(json_object)
-    return json_object
+# def handle_recommendations():
+#     search = input("Title of Manga: ")
+#     add_map("search", search)
+#     response = api_call(RECOMMENDATIONS_QUERY)
+#     json_object = response.json()
+#     get_recommendations(json_object)
+#     return json_object
 
 
 def handle_all_manga(request):
@@ -353,23 +354,24 @@ def handle_all_manga(request):
     formatted = get_all_manga(json_object)
     return formatted
 
-def handle_random_manga():
-    response = api_call(LIST_FROM_USER_QUERY)
-    json_object = response.json()
-    formatted = get_random_manga(json_object)
-    return formatted
+# def handle_random_manga():
+#     response = api_call(LIST_FROM_USER_QUERY)
+#     json_object = response.json()
+#     formatted = get_random_manga(json_object)
+#     return formatted
 
-def handle_characters():
-    search = input("Title of Manga: ")
-    add_map("search", search)
-    response = api_call(CHARACTER_QUERY)
-    json_object = response.json()
-    get_characters(json_object)
-    return json_object
+# def handle_characters():
+#     search = input("Title of Manga: ")
+#     add_map("search", search)
+#     response = api_call(CHARACTER_QUERY)
+#     json_object = response.json()
+#     get_characters(json_object)
+#     return json_object
 
-def handle_search(search):
+def handle_search(request, search):
+    token = get_current_token(request)
     add_map("search", search)
-    response = api_call(SEARCH_QUERY)
+    response = api_call(SEARCH_QUERY, token)
     return get_search(response.json())
 
 def handle_details(request, media_id):
@@ -385,29 +387,3 @@ def handle_progress(request, media_id):
     token = get_current_token(request)
     response = api_call(PROGRESS_QUERY, token)
     return response.json()["data"]["MediaList"]
-
-def main():
-    obj = handle_search("Attack on titan")
-    print(obj)
-    file_writing(obj)
-    # initialize_pandas()
-    # print("Which query to run?")
-    # choice = input("1. Recommendation\n2. Random manga from your list\n3. Characters from Manga\n")
-    #
-    # # use regex to remove non numbers
-    # choice = re.sub("[^0-9]", "", choice)
-    # print(choice)
-    # json_object = None
-    #
-    # if choice == "1":
-    #     json_object = handle_recommendations()
-    # elif choice == "2":
-    #     json_object = handle_random_manga()
-    # elif choice == "3":
-    #     json_object = handle_characters()
-    #
-    # file_writing(json_object)
-
-
-if __name__ == "__main__":
-    main()

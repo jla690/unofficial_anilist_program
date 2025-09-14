@@ -51,7 +51,7 @@ async def search(request: Request):
     search_value = request.query_params.get("search")
     search_results = None
     if search_value:
-        search_results = handle_search(search_value)
+        search_results = handle_search(request, search_value)
     return templates.TemplateResponse(
         "search.html",
         {
@@ -72,7 +72,7 @@ async def callback(request: Request):
 
     token = token_conversion(code)
     save_token(token)
-    user_data = get_logged_in_user()
+    user_data = get_logged_in_user(request)
     request.session["user"] = user_data
     request.session["token"] = token
     return RedirectResponse(url="/")
