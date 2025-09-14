@@ -2,47 +2,51 @@
 {% block title %}{{ media.title.romaji or media.title.english or 'Media' }} | AniList Local{% endblock %}
 {% block content %}
 <article class="detail">
-  <div class="detail-header">
-    <img class="detail-cover" src="{{ media.coverImage.extraLarge or media.coverImage.large }}" alt="Cover">
-    <div class="detail-info">
-      <h1>{{ media.title.romaji or media.title.english or media.title.native }}</h1>
-      <div class="badge-line">
-        {% if media.averageScore %}<span class="badge score">{{ media.averageScore }}</span>{% endif %}
-        {% if media.status %}<span class="badge status-{{ media.status|lower }}">{{ media.status }}</span>{% endif %}
-        {% if media.type %}<span class="badge">{{ media.type }}</span>{% endif %}
-        {% if media.format %}<span class="badge">{{ media.format }}</span>{% endif %}
-      </div>
-      <p class="detail-desc">{{ (media.description or '')|striptags|truncate(400, True, '…') }}</p>
-      <p class="meta-line">
-        {% if media.episodes %}<strong>Episodes:</strong> {{ media.episodes }}{% endif %}
-        {% if media.chapters %} <strong>Chapters:</strong> {{ media.chapters }}{% endif %}
-        {% if media.volumes %} <strong>Volumes:</strong> {{ media.volumes }}{% endif %}
-      </p>
-      {% if media.genres %}
-        <p class="genres">
-          {% for g in media.genres %}
-            <span class="tag">{{ g }}</span>
-          {% endfor %}
-        </p>
-      {% endif %}
-      <form class="inline-form" action="/api/anime/{{ media.id }}/progress" method="post">
-        <input type="number" name="progress" min="0" placeholder="Progress">
-        <select name="status">
-          <option value="">Status</option>
-          <option>CURRENT</option>
-          <option>PLANNING</option>
-          <option>COMPLETED</option>
-          <option>PAUSED</option>
-          <option>DROPPED</option>
-          <option>REPEATING</option>
-        </select>
-        <input type="number" name="score" min="0" max="100" step="1" placeholder="Score">
-        <button class="btn small primary">Save</button>
-      </form>
-      {% if media.siteUrl %}
-        <p><a class="external-link" href="{{ media.siteUrl }}" target="_blank" rel="noopener">View on AniList →</a></p>
-      {% endif %}
+    <div class="detail-header">
+        <img alt="Cover" class="detail-cover" src="{{ media.coverImage.extraLarge or media.coverImage.large }}">
+        <div class="detail-info">
+            <h1>{{ media.title.english or media.title.romaji or media.title.native }}</h1>
+            <div class="badge-line">
+                {% if media.averageScore %}<span class="badge score">{{ media.averageScore }}</span>{% endif %}
+                {% if media.status %}<span class="badge status-{{ media.status|lower }}">{{ media.status }}</span>{%
+                endif %}
+                {% if media.type %}<span class="badge">{{ media.type }}</span>{% endif %}
+                {% if media.format %}<span class="badge">{{ media.format }}</span>{% endif %}
+            </div>
+            <p class="detail-desc">{{ (media.description or '')|striptags|truncate(400, True, '…') }}</p>
+            <p class="meta-line">
+                {% if media.episodes %}<strong>Episodes:</strong> {{ media.episodes }}{% endif %}
+                {% if media.chapters %} <strong>Chapters:</strong> {{ media.chapters }}{% endif %}
+                {% if media.volumes %} <strong>Volumes:</strong> {{ media.volumes }}{% endif %}
+            </p>
+            {% if media.genres %}
+            <p class="genres">
+                {% for g in media.genres %}
+                <span class="tag">{{ g }}</span>
+                {% endfor %}
+            </p>
+            {% endif %}
+            <form action="/api/anime/{{ media.id }}/progress" class="inline-form" method="post">
+                <input min="0" name="progress" placeholder="Progress" type="number"
+                {% if user_data.progress %} value={{user_data.progress}} {% endif %}
+                >
+                <select name="status">
+                    <option value="">Status</option>
+                    <option value="CURRENT" {% if user_data.status == "CURRENT" %}selected{% endif %}>CURRENT</option>
+                    <option value="PLANNING" {% if user_data.status == "PLANNING" %}selected{% endif %}>PLANNING</option>
+                    <option value="COMPLETED" {% if user_data.status == "COMPLETED" %}selected{% endif %}>COMPLETED</option>
+                    <option value="PAUSED" {% if user_data.status == "PAUSED" %}selected{% endif %}>PAUSED</option>
+                    <option value="DROPPED" {% if user_data.status == "DROPPED" %}selected{% endif %}>DROPPED</option>
+                    <option value="REPEATING" {% if user_data.status == "REPEATING" %}selected{% endif %}>REPEATING</option>
+                </select>
+                <input max="100" min="0" name="score" placeholder="Score" step="1" type="number" {% if user_data.score %} value={{user_data.score}} {% endif %}>
+                <button class="btn small primary">Save</button>
+            </form>
+            {% if media.siteUrl %}
+            <p><a class="external-link" href="{{ media.siteUrl }}" rel="noopener" target="_blank">View on AniList →</a>
+            </p>
+            {% endif %}
+        </div>
     </div>
-  </div>
 </article>
 {% endblock %}

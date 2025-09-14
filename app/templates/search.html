@@ -5,9 +5,9 @@
 <p>Search for your favourite anime/manga</p>
 <form action="/search" method="get">
     <label>
-        <input type="text" name="search" placeholder="Search..">
+        <input name="search" placeholder="Search.." type="text">
     </label>
-    <button type="submit" class="btn primary">Search</button>
+    <button class="btn primary" type="submit">Search</button>
 </form>
 {% if lists %}
 <section class="list-section">
@@ -17,8 +17,9 @@
         <tr>
             <th>Title</th>
             <th>Site Score</th>
-            <th>Chapters</th>
-            <th>User Score</th>
+            <th>Chapters/Episodes</th>
+            <th>Format</th>
+            <th>Country of Origin</th>
             <th>Current Status</th>
         </tr>
         </thead>
@@ -26,16 +27,19 @@
         {% for item in lists %}
         <tr>
             <td class="title-cell">
-                <a href="/anime_detail">
-                    {{ item.title.romaji or item.title.english or item.title.native }}
+                <a href="/anime_detail/{{item.id}}">
+                    {{ item.title.english or item.title.romaji or item.title.native }}
                 </a>
             </td>
             <td>{{ item.averageScore or '—' }}</td>
             <td>
-                {{ item.chapters }}
+                {{ item.chapters or item.episodes}}
             </td>
             <td>
-                {{ "item.score * 10" }}
+                {{ item.format }}
+            </td>
+            <td>
+                {{ item.countryOfOrigin }}
             </td>
             <td>
                 {{ item.status }}

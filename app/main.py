@@ -26,14 +26,6 @@ app.mount(
 )
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
-def get_current_user(request: Request):
-    return request.session.get("user")
-
-def require_auth(request: Request):
-    user = get_current_user(request)
-    if not user:
-        return RedirectResponse(url="/auth/login")
-    return user
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -48,12 +40,14 @@ async def home(request: Request):
         }
     )
 
+
 @app.get("/auth/login", response_class=HTMLResponse)
 async def login(request: Request):
     return RedirectResponse(url=build_login_url())
 
+
 @app.get("/search", response_class=HTMLResponse)
-async def login(request: Request):
+async def search(request: Request):
     search_value = request.query_params.get("search")
     search_results = None
     if search_value:
@@ -69,6 +63,7 @@ async def login(request: Request):
         }
     )
 
+
 @app.get("/auth/callback")
 async def callback(request: Request):
     code = request.query_params.get("code")
@@ -82,9 +77,10 @@ async def callback(request: Request):
     request.session["token"] = token
     return RedirectResponse(url="/")
 
+
 @app.get("/lists", response_class=HTMLResponse)
 async def lists(request: Request):
-    all_manga = handle_all_manga()
+    all_manga = handle_all_manga(request)
     return templates.TemplateResponse(
         "lists.html",
         {
@@ -100,32 +96,18 @@ async def lists(request: Request):
 
 @app.get("/anime_detail/{media_id}", response_class=HTMLResponse)
 async def anime_detail(request: Request, media_id: int):
-    # You'll need to create a function to get media details by ID
-    # For now, using placeholder data
-    media_data = {
-        "id": media_id,
-        "title": {
-            "romaji": "Sample Title",
-            "english": "Sample Title EN",
-            "native": "サンプル"
-        },
-        "averageScore": 85,
-        "status": "FINISHED",
-        "type": "MANGA",
-        "format": "MANGA",
-        "description": "Sample description",
-        "coverImage": {
-            "extraLarge": "https://example.com/cover.jpg"
-        },
-        "siteUrl": f"https://anilist.co/manga/{media_id}"
-    }
+    anime_details = handle_details(request, media_id)
+    user_progress = handle_progress(request, media_id)
+    print(media_id)
+    print(user_progress)
 
     return templates.TemplateResponse(
         "anime_detail.html",
         {
             "request": request,
-            "media": media_data,
+            "media": anime_details,
             "user": get_current_user(request),
+            "user_data": user_progress,
             "messages": []
         }
     )

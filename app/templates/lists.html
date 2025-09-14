@@ -3,8 +3,8 @@
 {% block content %}
 <h2>My Lists</h2>
 <div class="tabs">
-    <a href="/lists?type=ANIME" class="tab {% if type != 'MANGA' %}active{% endif %}">Anime</a>
-    <a href="/lists?type=MANGA" class="tab {% if type == 'MANGA' %}active{% endif %}">Manga</a>
+    <a class="tab {% if type != 'MANGA' %}active{% endif %}" href="/lists?type=ANIME">Anime</a>
+    <a class="tab {% if type == 'MANGA' %}active{% endif %}" href="/lists?type=MANGA">Manga</a>
 </div>
 {% if lists %}
 <section class="list-section">
@@ -23,8 +23,8 @@
         {% for item in lists %}
         <tr>
             <td class="title-cell">
-                <a href="/anime_detail">
-                    {{ item.media.title.romaji or item.media.title.english or item.media.title.native }}
+                <a href="/anime_detail/{{item.media.id}}">
+                    {{ item.media.title.english or item.media.title.romaji or item.media.title.native }}
                 </a>
             </td>
             <td>{{ item.media.averageScore or '—' }}</td>

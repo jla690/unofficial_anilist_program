@@ -2,13 +2,14 @@
 
 import json
 import os
-import re
 import time
 import webbrowser
 
 import pandas as pd
 import requests
+from fastapi import FastAPI, Request
 from dotenv import load_dotenv
+from starlette.responses import RedirectResponse
 
 load_dotenv()
 LOGIN_URL = (
@@ -39,6 +40,7 @@ query {
 CHARACTER_QUERY = """
 query ($search: String!) {
   Media(search: $search) {
+  id
     title {
       romaji 
     }
@@ -56,11 +58,37 @@ query ($search: String!) {
 }
 """
 
+DETAILS_QUERY = """
+query Query($mediaId: Int) {
+  Media(id: $mediaId) {
+  id
+    coverImage {
+      extraLarge
+    }
+    description
+    status
+    title {
+      english
+      native
+      romaji
+    }
+    type
+    meanScore
+    siteUrl
+    episodes
+    chapters
+    volumes
+    genres
+    format
+  }
+}
+"""
+
 SEARCH_QUERY ="""
 query ($search: String!) {
   Page {
-    media(search: $search, type: MANGA) {
-      id
+    media(search: $search) {
+    id
       title {
         romaji
         english
@@ -69,6 +97,13 @@ query ($search: String!) {
       averageScore
       chapters
       status
+      endDate {
+        year
+      }
+      id
+      format
+      episodes
+      countryOfOrigin
     }
   }
 }
@@ -77,6 +112,7 @@ query ($search: String!) {
 RECOMMENDATIONS_QUERY = """
 query ($search: String!) {
   Media(search: $search) {
+  id
     title {
       romaji 
     }
@@ -100,6 +136,19 @@ query ($search: String!) {
 }
 """
 
+PROGRESS_QUERY = """
+query Query($mediaId: Int, $userId: Int) {
+  MediaList(mediaId: $mediaId, userId: $userId) {
+    progress
+    status
+    score
+    user {
+      name
+    }
+  }
+}
+"""
+
 LIST_FROM_USER_QUERY = """
 query ($type: MediaType!, $userId: Int!) {
   MediaListCollection(type: $type, userId: $userId) {
@@ -107,6 +156,7 @@ query ($type: MediaType!, $userId: Int!) {
       name
       entries {
         media {
+        id
           averageScore
           title {
             english
@@ -124,8 +174,19 @@ query ($type: MediaType!, $userId: Int!) {
 }
 """
 
-variables = {"type": "MANGA", "userId": 7483344}
+variables = {"type": "MANGA"}
 
+def get_current_user(request: Request):
+    return request.session["user"]
+
+def get_current_token(request: Request):
+    return request.session["token"]["access_token"]
+
+def require_auth(request: Request):
+    user = get_current_user(request)
+    if not user:
+        return RedirectResponse(url="/auth/login")
+    return user
 
 def print_markdown(json_object):
     print(pd.json_normalize(json_object).to_markdown(index=False))
@@ -146,9 +207,8 @@ def get_logged_in_user():
     return response["data"]["Viewer"]
 
 
-def api_call(query):
+def api_call(query, token):
     try:
-        token = authorization()
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -160,6 +220,7 @@ def api_call(query):
             headers=headers,
             timeout=20,
         )
+        print(response.json())
         return response
     except requests.RequestException as e:
         print(f"Error with POST request: {e}")
@@ -283,8 +344,11 @@ def handle_recommendations():
     return json_object
 
 
-def handle_all_manga():
-    response = api_call(LIST_FROM_USER_QUERY)
+def handle_all_manga(request):
+    token = request.session["token"]["access_token"]
+    user_id = get_current_user(request)["id"]
+    add_map("userId", user_id)
+    response = api_call(LIST_FROM_USER_QUERY, token)
     json_object = response.json()
     formatted = get_all_manga(json_object)
     return formatted
@@ -308,6 +372,19 @@ def handle_search(search):
     response = api_call(SEARCH_QUERY)
     return get_search(response.json())
 
+def handle_details(request, media_id):
+    add_map("mediaId", media_id)
+    token = get_current_token(request)
+    response = api_call(DETAILS_QUERY, token)
+    return response.json()["data"]["Media"]
+
+def handle_progress(request, media_id):
+    add_map("mediaId", media_id)
+    user_id = get_current_user(request)["id"]
+    add_map("userId", user_id)
+    token = get_current_token(request)
+    response = api_call(PROGRESS_QUERY, token)
+    return response.json()["data"]["MediaList"]
 
 def main():
     obj = handle_search("Attack on titan")

@@ -2,25 +2,25 @@
 {% block title %}Home | AniList Local{% endblock %}
 {% block content %}
 <section class="hero">
-  <h1 class="hero-title">AniList Local</h1>
-  <p class="hero-subtitle">A personal dashboard to search, track, and manage your anime & manga lists locally.</p>
-  {% if not user %}
-    <a href="/auth/login" class="btn primary large">Login with AniList</a>
-  {% else %}
+    <h1 class="hero-title">AniList Local</h1>
+    <p class="hero-subtitle">A personal dashboard to search, track, and manage your anime & manga lists locally.</p>
+    {% if not user %}
+    <a class="btn primary large" href="/auth/login">Login with AniList</a>
+    {% else %}
     <div class="quick-links">
-      <a class="card-link" href="/search">
-        <div class="card">
-          <h3>Search</h3>
-          <p>Find anime & manga metadata via AniList GraphQL.</p>
-        </div>
-      </a>
-      <a class="card-link" href="/lists">
-        <div class="card">
-          <h3>My Lists</h3>
-          <p>View & update your watching/reading progress.</p>
-        </div>
-      </a>
+        <a class="card-link" href="/search">
+            <div class="card">
+                <h3>Search</h3>
+                <p>Find anime & manga metadata via AniList GraphQL.</p>
+            </div>
+        </a>
+        <a class="card-link" href="/lists">
+            <div class="card">
+                <h3>My Lists</h3>
+                <p>View & update your watching/reading progress.</p>
+            </div>
+        </a>
     </div>
-  {% endif %}
+    {% endif %}
 </section>
 {% endblock %}
