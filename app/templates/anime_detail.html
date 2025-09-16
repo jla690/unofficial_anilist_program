@@ -26,21 +26,45 @@
                 {% endfor %}
             </p>
             {% endif %}
-            <form action="/api/anime/{{ media.id }}/progress" class="inline-form" method="post">
-                <input min="0" name="progress" placeholder="Progress" type="number"
-                {% if user_data.progress %} value={{user_data.progress}} {% endif %}
-                >
+            <form action="/api/post/{{ media.id }}/progress" class="inline-form" method="post">
+                <input
+                    type="number"
+                    name="progress"
+                    placeholder="Progress"
+                    min="0"
+                    {% if user_data.progress %}value="{{ user_data.progress }}"{% endif %}>
+
                 <select name="status">
                     <option value="">Status</option>
-                    <option value="CURRENT" {% if user_data.status == "CURRENT" %}selected{% endif %}>CURRENT</option>
-                    <option value="PLANNING" {% if user_data.status == "PLANNING" %}selected{% endif %}>PLANNING</option>
-                    <option value="COMPLETED" {% if user_data.status == "COMPLETED" %}selected{% endif %}>COMPLETED</option>
-                    <option value="PAUSED" {% if user_data.status == "PAUSED" %}selected{% endif %}>PAUSED</option>
-                    <option value="DROPPED" {% if user_data.status == "DROPPED" %}selected{% endif %}>DROPPED</option>
-                    <option value="REPEATING" {% if user_data.status == "REPEATING" %}selected{% endif %}>REPEATING</option>
+                    <option value="CURRENT" {% if user_data.status == "CURRENT" %}selected{% endif %}>
+                        CURRENT
+                    </option>
+                    <option value="PLANNING" {% if user_data.status == "PLANNING" %}selected{% endif %}>
+                        PLANNING
+                    </option>
+                    <option value="COMPLETED" {% if user_data.status == "COMPLETED" %}selected{% endif %}>
+                        COMPLETED
+                    </option>
+                    <option value="PAUSED" {% if user_data.status == "PAUSED" %}selected{% endif %}>
+                        PAUSED
+                    </option>
+                    <option value="DROPPED" {% if user_data.status == "DROPPED" %}selected{% endif %}>
+                        DROPPED
+                    </option>
+                    <option value="REPEATING" {% if user_data.status == "REPEATING" %}selected{% endif %}>
+                        REPEATING
+                    </option>
                 </select>
-                <input max="100" min="0" name="score" placeholder="Score" step="1" type="number" {% if user_data.score %} value={{user_data.score}} {% endif %}>
-                <button class="btn small primary">Save</button>
+
+                <input
+                    type="number"
+                    name="score"
+                    placeholder="Score"
+                    min="0"
+                    max="100"
+                    step="1"
+                    {% if user_data.score %}value="{{ user_data.score }}"{% endif %}>
+                <button class="btn small primary" type="submit">Save</button>
             </form>
             {% if media.siteUrl %}
             <p><a class="external-link" href="{{ media.siteUrl }}" rel="noopener" target="_blank">View on AniList →</a>
@@ -49,4 +73,14 @@
         </div>
     </div>
 </article>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("success") === "1") {
+    alert("Successfully saved progress");
+  }
+  else if (urlParams.get("success") === "0") {
+      alert("Failed to save progress");
+  }
+</script>
 {% endblock %}

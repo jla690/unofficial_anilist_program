@@ -3,12 +3,10 @@
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
-from starlette.responses import RedirectResponse
 
 from app.queries_and_variables import *
 
@@ -98,8 +96,6 @@ async def lists(request: Request):
 async def anime_detail(request: Request, media_id: int):
     anime_details = handle_details(request, media_id)
     user_progress = handle_progress(request, media_id)
-    print(media_id)
-    print(user_progress)
 
     return templates.TemplateResponse(
         "anime_detail.html",
@@ -111,6 +107,24 @@ async def anime_detail(request: Request, media_id: int):
             "messages": []
         }
     )
+
+@app.post("/api/post/{media_id}/progress")
+async def save_progress(request: Request, media_id: int):
+    form_data = await request.form()
+    progress = form_data.get("progress")
+    status = form_data.get("status")
+    score = form_data.get("score")
+
+    request.session["progress"] = progress
+    request.session["status"] = status
+    request.session["score"] = score
+
+    title = handle_saving(request, media_id)
+
+    if title:
+        return RedirectResponse(f"/anime_detail/{media_id}?success=1", status_code=303)
+    else:
+        return RedirectResponse(f"/anime_detail/{media_id}?success=0", status_code=303)
 
 
 if __name__ == "__main__":

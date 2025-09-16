@@ -4,6 +4,7 @@ import json
 import os
 import time
 import webbrowser
+from http.client import responses
 
 import pandas as pd
 import requests
@@ -174,6 +175,18 @@ query ($type: MediaType!, $userId: Int!) {
 }
 """
 
+MUTATION_QUERY = """
+mutation Mutation($mediaId: Int, $score: Float, $progress: Int, $status: MediaListStatus) {
+  SaveMediaListEntry(mediaId: $mediaId, score: $score, progress: $progress, status: $status) {
+    media {
+      title {
+        romaji
+      }
+    }
+  }
+}
+"""
+
 variables = {"type": "MANGA"}
 
 def get_current_user(request: Request):
@@ -221,7 +234,6 @@ def api_call(query, token):
             headers=headers,
             timeout=20,
         )
-        print(response.json())
         return response
     except requests.RequestException as e:
         print(f"Error with POST request: {e}")
@@ -379,6 +391,15 @@ def handle_details(request, media_id):
     token = get_current_token(request)
     response = api_call(DETAILS_QUERY, token)
     return response.json()["data"]["Media"]
+
+def handle_saving(request, media_id):
+    add_map("mediaId", media_id)
+    for key in ["score", "progress", "status"]:
+        if request.session[key]:
+            add_map(key, request.session[key])
+    token = get_current_token(request)
+    response = api_call(MUTATION_QUERY, token)
+    return response.json()["data"]["SaveMediaListEntry"]["media"]["title"]["romaji"]
 
 def handle_progress(request, media_id):
     add_map("mediaId", media_id)
