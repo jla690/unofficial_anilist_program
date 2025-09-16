@@ -3,12 +3,26 @@
 from pathlib import Path
 
 import uvicorn
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
+from starlette.responses import RedirectResponse
 
-from app.queries_and_variables import *
+from app.queries_and_variables import (
+    SECRET_KEY,
+    build_login_url,
+    get_current_user,
+    get_logged_in_user,
+    handle_all_manga,
+    handle_details,
+    handle_progress,
+    handle_saving,
+    handle_search,
+    save_token,
+    token_conversion,
+)
 
 BASE_DIR = Path(__file__).resolve().parent  # this = app/
 

@@ -4,12 +4,11 @@ import json
 import os
 import time
 import webbrowser
-from http.client import responses
 
 import pandas as pd
 import requests
-from fastapi import FastAPI, Request
 from dotenv import load_dotenv
+from fastapi import Request
 from starlette.responses import RedirectResponse
 
 load_dotenv()
