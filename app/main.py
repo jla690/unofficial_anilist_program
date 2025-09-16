@@ -22,6 +22,7 @@ from app.queries_and_variables import (
     handle_search,
     save_token,
     token_conversion,
+    handle_all_anime,
 )
 
 BASE_DIR = Path(__file__).resolve().parent  # this = app/
@@ -92,17 +93,23 @@ async def callback(request: Request):
 
 @app.get("/lists", response_class=HTMLResponse)
 async def lists(request: Request):
-    all_manga = handle_all_manga(request)
+    media_type = request.query_params.get("type")
+    all_titles = None
+    if media_type == "MANGA":
+        all_titles = handle_all_manga(request)
+    else:
+        all_titles = handle_all_anime(request)
+
     return templates.TemplateResponse(
         "lists.html",
         {
             "request": request,
-            "lists": all_manga,
+            "lists": all_titles,
             "user": get_current_user(request),
             "messages": [],
-            "type": "MANGA",
-            "now": __import__("datetime").datetime.utcnow
-        }
+            "type": media_type,
+            "now": __import__("datetime").datetime.utcnow,
+        },
     )
 
 

@@ -11,7 +11,6 @@
                 {% if media.status %}<span class="badge status-{{ media.status|lower }}">{{ media.status }}</span>{%
                 endif %}
                 {% if media.type %}<span class="badge">{{ media.type }}</span>{% endif %}
-                {% if media.format %}<span class="badge">{{ media.format }}</span>{% endif %}
             </div>
             <p class="detail-desc">{{ (media.description or '')|striptags|truncate(400, True, '…') }}</p>
             <p class="meta-line">
@@ -28,42 +27,48 @@
             {% endif %}
             <form action="/api/post/{{ media.id }}/progress" class="inline-form" method="post">
                 <input
-                    type="number"
-                    name="progress"
-                    placeholder="Progress"
-                    min="0"
-                    {% if user_data.progress %}value="{{ user_data.progress }}"{% endif %}>
+                        type="number"
+                        name="progress"
+                        placeholder="Progress"
+                        min="0"
+                        {% if user_data.progress %}value="{{ user_data.progress }}" {% endif %}>
 
                 <select name="status">
                     <option value="">Status</option>
-                    <option value="CURRENT" {% if user_data.status == "CURRENT" %}selected{% endif %}>
-                        CURRENT
+                    <option value="CURRENT" {% if user_data.status==
+                    "CURRENT" %}selected{% endif %}>
+                    CURRENT
                     </option>
-                    <option value="PLANNING" {% if user_data.status == "PLANNING" %}selected{% endif %}>
-                        PLANNING
+                    <option value="PLANNING" {% if user_data.status==
+                    "PLANNING" %}selected{% endif %}>
+                    PLANNING
                     </option>
-                    <option value="COMPLETED" {% if user_data.status == "COMPLETED" %}selected{% endif %}>
-                        COMPLETED
+                    <option value="COMPLETED" {% if user_data.status==
+                    "COMPLETED" %}selected{% endif %}>
+                    COMPLETED
                     </option>
-                    <option value="PAUSED" {% if user_data.status == "PAUSED" %}selected{% endif %}>
-                        PAUSED
+                    <option value="PAUSED" {% if user_data.status==
+                    "PAUSED" %}selected{% endif %}>
+                    PAUSED
                     </option>
-                    <option value="DROPPED" {% if user_data.status == "DROPPED" %}selected{% endif %}>
-                        DROPPED
+                    <option value="DROPPED" {% if user_data.status==
+                    "DROPPED" %}selected{% endif %}>
+                    DROPPED
                     </option>
-                    <option value="REPEATING" {% if user_data.status == "REPEATING" %}selected{% endif %}>
-                        REPEATING
+                    <option value="REPEATING" {% if user_data.status==
+                    "REPEATING" %}selected{% endif %}>
+                    REPEATING
                     </option>
                 </select>
 
                 <input
-                    type="number"
-                    name="score"
-                    placeholder="Score"
-                    min="0"
-                    max="100"
-                    step="1"
-                    {% if user_data.score %}value="{{ user_data.score }}"{% endif %}>
+                        type="number"
+                        name="score"
+                        placeholder="Score"
+                        min="0"
+                        max="100"
+                        step="1"
+                        {% if user_data.score %}value="{{ user_data.score }}" {% endif %}>
                 <button class="btn small primary" type="submit">Save</button>
             </form>
             {% if media.siteUrl %}
@@ -75,12 +80,11 @@
 </article>
 
 <script>
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get("success") === "1") {
-    alert("Successfully saved progress");
-  }
-  else if (urlParams.get("success") === "0") {
-      alert("Failed to save progress");
-  }
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("success") === "1") {
+        alert("Successfully saved progress");
+    } else if (urlParams.get("success") === "0") {
+        alert("Failed to save progress");
+    }
 </script>
 {% endblock %}

@@ -30,9 +30,6 @@
             {% endif %}
         </ul>
     </nav>
-    <button aria-label="Toggle color theme" class="theme-toggle" id="themeToggle">
-        <span class="icon">🌓</span>
-    </button>
 </header>
 
 <div class="layout">
@@ -59,20 +56,6 @@
         {% endblock %}
     </aside>
 </div>
-
-<script>
-    (function () {
-        const root = document.documentElement;
-        const btn = document.getElementById('themeToggle');
-        const stored = localStorage.getItem('theme');
-        if (stored) root.setAttribute('data-theme', stored);
-        btn?.addEventListener('click', () => {
-            const current = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            root.setAttribute('data-theme', current);
-            localStorage.setItem('theme', current);
-        });
-    })();
-</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

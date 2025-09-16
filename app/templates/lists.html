@@ -8,7 +8,13 @@
 </div>
 {% if lists %}
 <section class="list-section">
-    <h3>All Manga</h3>
+    <h3>
+        {% if type == "MANGA" %}
+            All Manga
+        {% else %}
+            All Anime
+        {% endif %}
+    </h3>
     <table class="media-table">
         <thead>
         <tr>

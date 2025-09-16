@@ -186,7 +186,7 @@ mutation Mutation($mediaId: Int, $score: Float, $progress: Int, $status: MediaLi
 }
 """
 
-variables = {"type": "MANGA"}
+variables = {}
 
 def get_current_user(request: Request):
     return request.session["user"]
@@ -360,6 +360,17 @@ def handle_all_manga(request):
     token = request.session["token"]["access_token"]
     user_id = get_current_user(request)["id"]
     add_map("userId", user_id)
+    add_map("type", "MANGA")
+    response = api_call(LIST_FROM_USER_QUERY, token)
+    json_object = response.json()
+    formatted = get_all_manga(json_object)
+    return formatted
+
+def handle_all_anime(request):
+    token = request.session["token"]["access_token"]
+    user_id = get_current_user(request)["id"]
+    add_map("userId", user_id)
+    add_map("type", "ANIME")
     response = api_call(LIST_FROM_USER_QUERY, token)
     json_object = response.json()
     formatted = get_all_manga(json_object)
