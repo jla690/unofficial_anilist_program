@@ -264,7 +264,7 @@ def get_search(json_object):
     return all_titles
 
 # def get_random_manga(json_object):
-#     all_titles = get_all_manga(json_object)
+#     all_titles = extract_media_list(json_object)
 #
 #     df = pd.json_normalize(all_titles)
 #     random_row = df.sample(n=1).to_markdown(index=False)
