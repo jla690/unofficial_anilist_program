@@ -1,9 +1,9 @@
-# anilist_program
-Uses AniList API to get authenticate user, get it's library, and get a random manga.
-Also does recommendations and gets characters from a search of the manga.
-Just testing out the anilist API
-For future
-- use refresh token
-- do recommendation system? - DONE
-- better logging
-- proper exception handling
+Anilist website clone using FastAPI.
+
+Currently handles:
+- Logging in
+- Checking user list of manga and anime
+- Searching
+- Saving title specific (progress, status, score)
+- Details of titles
+- 
