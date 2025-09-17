@@ -29,6 +29,8 @@ MANIFEST
 # build specific
 data.json
 token.json
+.idea
+.DS_Store
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

@@ -21,7 +21,6 @@ from app.queries_and_variables import (
     handle_progress,
     handle_saving,
     handle_search,
-    save_token,
     token_conversion,
 )
 
@@ -84,7 +83,6 @@ async def callback(request: Request):
         return RedirectResponse(url="/")
 
     token = token_conversion(code)
-    save_token(token)
     request.session["token"] = token
     user_data = get_logged_in_user(request)
     request.session["user"] = user_data

@@ -1,8 +1,6 @@
 # pylint: disable=missing-function-docstring, missing-module-docstring
 
-import json
 import os
-import time
 from pathlib import Path
 
 import pandas as pd
@@ -244,50 +242,6 @@ def token_conversion(code):
     json_object = response.json()
     return json_object
 
-def file_writing(obj):
-    if obj is None:
-        print("JSON object is empty")
-        return
-    with open("../data.json", "w") as f:
-        json.dump(obj, f, ensure_ascii=False, indent=2)
-
-
-def get_token_from_file():
-    if not os.path.exists(TOKEN_PATH):
-        return None
-    with open(TOKEN_PATH) as f:
-        token = json.load(f)
-
-        # verify expiration
-        if time.time() >= token["expiration_time"]:
-            return None
-        return token
-
-
-def save_token(token):
-    if token is None:
-        print("Can't save None token")
-        return
-    token["expiration_time"] = time.time() + token["expires_in"]
-    with open(TOKEN_PATH, "w") as f:
-        json.dump(token, f, indent=2)
-
-
-# def authorization():
-#     token = get_token_from_file()
-#     if token:
-#         return token["access_token"]
-#
-#     auth_url = build_login_url()
-#     webbrowser.open(auth_url, new=0, autoraise=True)
-#     code = input("Enter code\n")
-#     code = code.strip()
-#
-#     json_object = token_conversion(code)
-#     save_token(json_object)
-#     return json_object["access_token"]
-
-
 def get_all_manga(json_object):
     all_titles = []
     arrays = json_object["data"]["MediaListCollection"]["lists"]
@@ -380,8 +334,6 @@ def handle_all_anime(request):
 def handle_search(request, search):
     variables = {}
     token = get_current_token(request)
-    # if token is None:
-    #     return None
     variables["search"] = search
     response = api_call(SEARCH_QUERY, token, variables)
     if response is None:
