@@ -3,7 +3,6 @@
 import os
 from pathlib import Path
 
-import pandas as pd
 import requests
 from dotenv import load_dotenv
 from fastapi import Request
@@ -185,19 +184,22 @@ mutation Mutation($mediaId: Int, $score: Float, $progress: Int, $status: MediaLi
 }
 """
 
+# Gets current user from the request
 def get_current_user(request: Request):
     return request.session.get("user")
 
+# Gets token stored in request, returns None if not found
 def get_current_token(request: Request):
     token =  request.session.get("token")
     if token is None:
         return None
     return token["access_token"]
 
+# Builds login url
 def build_login_url():
     return LOGIN_URL.format(client_id=client_id, redirect_uri=REDIRECT_URL)
 
-
+# Gets current user data, like name, id, avatar
 def get_logged_in_user(request):
     variables = {}
     token = get_current_token(request)
@@ -206,7 +208,7 @@ def get_logged_in_user(request):
         return None
     return response.json()["data"]["Viewer"]
 
-
+# Makes API calls to the Anilist GraphQL server
 def api_call(query, token, variables):
     headers = {
         "Content-Type": "application/json",
@@ -226,7 +228,7 @@ def api_call(query, token, variables):
         print(f"Error with POST request: {e}")
         return None
 
-
+# Makes a call to the token url to get the code returned from logging in. Gets the token
 def token_conversion(code):
     response = requests.post(
         TOKEN_URL,
@@ -242,7 +244,8 @@ def token_conversion(code):
     json_object = response.json()
     return json_object
 
-def get_all_manga(json_object):
+# Gets all titles of user
+def get_all_titles(json_object):
     all_titles = []
     arrays = json_object["data"]["MediaListCollection"]["lists"]
     for arr in arrays:
@@ -251,6 +254,7 @@ def get_all_manga(json_object):
 
     return all_titles
 
+# Does search using title
 def get_search(json_object):
     all_titles = []
     arrays = json_object["data"]["Page"]["media"]
@@ -259,13 +263,13 @@ def get_search(json_object):
 
     return all_titles
 
-def get_random_manga(json_object):
-    all_titles = get_all_manga(json_object)
-
-    df = pd.json_normalize(all_titles)
-    random_row = df.sample(n=1).to_markdown(index=False)
-    print(random_row)
-    return random_row
+# def get_random_manga(json_object):
+#     all_titles = get_all_manga(json_object)
+#
+#     df = pd.json_normalize(all_titles)
+#     random_row = df.sample(n=1).to_markdown(index=False)
+#     print(random_row)
+#     return random_row
 
 
 # def get_recommendations(json_object: dict):
@@ -277,9 +281,9 @@ def get_random_manga(json_object):
 #         return
 
 
-def get_characters(json_object):
-    edges = json_object["data"]["Media"]["characters"]["edges"]
-    return edges
+# def get_characters(json_object):
+#     edges = json_object["data"]["Media"]["characters"]["edges"]
+#     return edges
 
 
 # def handle_recommendations():
@@ -290,7 +294,7 @@ def get_characters(json_object):
 #     get_recommendations(json_object)
 #     return json_object
 
-
+# Gets all manga of a user
 def handle_all_manga(request):
     variables = {}
     token = get_current_token(request)
@@ -301,9 +305,10 @@ def handle_all_manga(request):
     variables["type"] = "MANGA"
     response = api_call(LIST_FROM_USER_QUERY, token, variables)
     json_object = response.json()
-    formatted = get_all_manga(json_object)
+    formatted = get_all_titles(json_object)
     return formatted
 
+# Gets all anime of a current user
 def handle_all_anime(request):
     variables = {}
     token = get_current_token(request)
@@ -314,7 +319,7 @@ def handle_all_anime(request):
     variables["type"] = "ANIME"
     response = api_call(LIST_FROM_USER_QUERY, token, variables)
     json_object = response.json()
-    formatted = get_all_manga(json_object)
+    formatted = get_all_titles(json_object)
     return formatted
 
 # def handle_random_manga():
@@ -331,6 +336,7 @@ def handle_all_anime(request):
 #     get_characters(json_object)
 #     return json_object
 
+# Handles searching
 def handle_search(request, search):
     variables = {}
     token = get_current_token(request)
@@ -340,6 +346,7 @@ def handle_search(request, search):
         return None
     return get_search(response.json())
 
+# Handles getting details of media
 def handle_details(request, media_id):
     variables = {}
     token = get_current_token(request)
@@ -349,6 +356,7 @@ def handle_details(request, media_id):
         return None
     return response.json()["data"]["Media"]
 
+# Handles saving of data for media
 def handle_saving(request, media_id):
     variables = {}
     token = get_current_token(request)
@@ -356,13 +364,15 @@ def handle_saving(request, media_id):
         return None
     variables["mediaId"] = media_id
     for key in ["score", "progress", "status"]:
-        if request.session[key]:
-            variables[key] = request.session[key]
+        value = request.session.get(key)
+        if value is not None:
+            variables[key] = value
     response = api_call(MUTATION_QUERY, token, variables)
     if response is None:
         return None
     return response.json()["data"]["SaveMediaListEntry"]["media"]["title"]["romaji"]
 
+# Gets the progress of media for user
 def handle_progress(request, media_id):
     variables = {}
     token = get_current_token(request)
