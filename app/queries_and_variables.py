@@ -365,7 +365,7 @@ def handle_saving(request, media_id):
     variables["mediaId"] = media_id
     for key in ["score", "progress", "status"]:
         value = request.session.get(key)
-        if value is not None:
+        if value:
             variables[key] = value
     response = api_call(MUTATION_QUERY, token, variables)
     if response is None:
