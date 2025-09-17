@@ -7,3 +7,8 @@ Currently handles:
 - Saving title specific (progress, status, score)
 - Details of titles
 - 
+
+TODO:
+- Show trending media for anime and manga with thumbnails
+- Show more stuff on anime detail (should be trivial, just annoying)
+- 
