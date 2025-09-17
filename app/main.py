@@ -15,6 +15,7 @@ from app.queries_and_variables import (
     build_login_url,
     get_current_user,
     get_logged_in_user,
+    handle_all_anime,
     handle_all_manga,
     handle_details,
     handle_progress,
@@ -22,7 +23,6 @@ from app.queries_and_variables import (
     handle_search,
     save_token,
     token_conversion,
-    handle_all_anime,
 )
 
 BASE_DIR = Path(__file__).resolve().parent  # this = app/
@@ -85,9 +85,9 @@ async def callback(request: Request):
 
     token = token_conversion(code)
     save_token(token)
+    request.session["token"] = token
     user_data = get_logged_in_user(request)
     request.session["user"] = user_data
-    request.session["token"] = token
     return RedirectResponse(url="/")
 
 

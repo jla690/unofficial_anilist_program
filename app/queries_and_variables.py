@@ -3,25 +3,26 @@
 import json
 import os
 import time
-import webbrowser
+from pathlib import Path
 
 import pandas as pd
 import requests
 from dotenv import load_dotenv
 from fastapi import Request
-from starlette.responses import RedirectResponse
+
+BASE_DIR = Path(__file__).resolve().parent
 
 load_dotenv()
 LOGIN_URL = (
     "https://anilist.co/api/v2/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code")
 GRAPHQL_URL = "https://graphql.anilist.co"
 TOKEN_URL = "https://anilist.co/api/v2/oauth/token"
-FILE_PATH = "../data.json"
+FILE_PATH = BASE_DIR / "data.json"
 client_id = int(os.getenv("ANILIST_CLIENT_ID"))
 client_secret = os.getenv("ANILIST_CLIENT_SECRET")
 SECRET_KEY = os.getenv("SECRET_KEY")
 REDIRECT_URL = "http://localhost:8000/auth/callback"
-TOKEN_PATH = "../token.json"
+TOKEN_PATH = BASE_DIR / "token.json"
 
 USER_QUERY = """
 query {
@@ -186,47 +187,36 @@ mutation Mutation($mediaId: Int, $score: Float, $progress: Int, $status: MediaLi
 }
 """
 
-variables = {}
-
 def get_current_user(request: Request):
-    return request.session["user"]
+    return request.session.get("user")
 
 def get_current_token(request: Request):
-    return request.session["token"]["access_token"]
-
-def require_auth(request: Request):
-    user = get_current_user(request)
-    if not user:
-        return RedirectResponse(url="/auth/login")
-    return user
-
-def print_markdown(json_object):
-    print(pd.json_normalize(json_object).to_markdown(index=False))
-
-
-def initialize_pandas():
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.width', None)
-    pd.set_option('display.max_colwidth', None)
-
+    token =  request.session.get("token")
+    if token is None:
+        return None
+    return token["access_token"]
 
 def build_login_url():
     return LOGIN_URL.format(client_id=client_id, redirect_uri=REDIRECT_URL)
 
 
 def get_logged_in_user(request):
+    variables = {}
     token = get_current_token(request)
-    response = api_call(USER_QUERY, token).json()
-    return response["data"]["Viewer"]
+    response = api_call(USER_QUERY, token, variables)
+    if response is None:
+        return None
+    return response.json()["data"]["Viewer"]
 
 
-def api_call(query, token):
+def api_call(query, token, variables):
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     try:
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        }
         response = requests.post(
             GRAPHQL_URL,
             json={"query": query, "variables": variables},
@@ -253,11 +243,6 @@ def token_conversion(code):
     )
     json_object = response.json()
     return json_object
-
-
-def add_map(key, value):
-    variables[key] = value
-
 
 def file_writing(obj):
     if obj is None:
@@ -288,19 +273,19 @@ def save_token(token):
         json.dump(token, f, indent=2)
 
 
-def authorization():
-    token = get_token_from_file()
-    if token:
-        return token["access_token"]
-
-    auth_url = build_login_url()
-    webbrowser.open(auth_url, new=0, autoraise=True)
-    code = input("Enter code\n")
-    code = code.strip()
-
-    json_object = token_conversion(code)
-    save_token(json_object)
-    return json_object["access_token"]
+# def authorization():
+#     token = get_token_from_file()
+#     if token:
+#         return token["access_token"]
+#
+#     auth_url = build_login_url()
+#     webbrowser.open(auth_url, new=0, autoraise=True)
+#     code = input("Enter code\n")
+#     code = code.strip()
+#
+#     json_object = token_conversion(code)
+#     save_token(json_object)
+#     return json_object["access_token"]
 
 
 def get_all_manga(json_object):
@@ -318,7 +303,6 @@ def get_search(json_object):
     for arr in arrays:
         all_titles.append(arr)
 
-
     return all_titles
 
 def get_random_manga(json_object):
@@ -330,16 +314,13 @@ def get_random_manga(json_object):
     return random_row
 
 
-def get_recommendations(json_object: dict):
-    # no recommendations found
-    edges = json_object["data"]["Media"]["recommendations"]["edges"]
-    title = json_object["data"]["Media"]["title"]
-    print_markdown(title)
-    if len(edges) == 0:
-        print("No recommendations found for: ", json_object["data"]["Media"]["title"])
-        return
-
-    print_markdown(edges)
+# def get_recommendations(json_object: dict):
+#     # no recommendations found
+#     edges = json_object["data"]["Media"]["recommendations"]["edges"]
+#     title = json_object["data"]["Media"]["title"]
+#     if len(edges) == 0:
+#         print("No recommendations found for: ", json_object["data"]["Media"]["title"])
+#         return
 
 
 def get_characters(json_object):
@@ -357,21 +338,27 @@ def get_characters(json_object):
 
 
 def handle_all_manga(request):
-    token = request.session["token"]["access_token"]
+    variables = {}
+    token = get_current_token(request)
+    if token is None:
+        return None
     user_id = get_current_user(request)["id"]
-    add_map("userId", user_id)
-    add_map("type", "MANGA")
-    response = api_call(LIST_FROM_USER_QUERY, token)
+    variables["userId"] = user_id
+    variables["type"] = "MANGA"
+    response = api_call(LIST_FROM_USER_QUERY, token, variables)
     json_object = response.json()
     formatted = get_all_manga(json_object)
     return formatted
 
 def handle_all_anime(request):
-    token = request.session["token"]["access_token"]
+    variables = {}
+    token = get_current_token(request)
+    if token is None:
+        return None
     user_id = get_current_user(request)["id"]
-    add_map("userId", user_id)
-    add_map("type", "ANIME")
-    response = api_call(LIST_FROM_USER_QUERY, token)
+    variables["userId"] = user_id
+    variables["type"] = "ANIME"
+    response = api_call(LIST_FROM_USER_QUERY, token, variables)
     json_object = response.json()
     formatted = get_all_manga(json_object)
     return formatted
@@ -391,30 +378,48 @@ def handle_all_anime(request):
 #     return json_object
 
 def handle_search(request, search):
+    variables = {}
     token = get_current_token(request)
-    add_map("search", search)
-    response = api_call(SEARCH_QUERY, token)
+    # if token is None:
+    #     return None
+    variables["search"] = search
+    response = api_call(SEARCH_QUERY, token, variables)
+    if response is None:
+        return None
     return get_search(response.json())
 
 def handle_details(request, media_id):
-    add_map("mediaId", media_id)
+    variables = {}
     token = get_current_token(request)
-    response = api_call(DETAILS_QUERY, token)
+    variables["mediaId"] = media_id
+    response = api_call(DETAILS_QUERY, token, variables)
+    if response is None:
+        return None
     return response.json()["data"]["Media"]
 
 def handle_saving(request, media_id):
-    add_map("mediaId", media_id)
+    variables = {}
+    token = get_current_token(request)
+    if token is None:
+        return None
+    variables["mediaId"] = media_id
     for key in ["score", "progress", "status"]:
         if request.session[key]:
-            add_map(key, request.session[key])
-    token = get_current_token(request)
-    response = api_call(MUTATION_QUERY, token)
+            variables[key] = request.session[key]
+    response = api_call(MUTATION_QUERY, token, variables)
+    if response is None:
+        return None
     return response.json()["data"]["SaveMediaListEntry"]["media"]["title"]["romaji"]
 
 def handle_progress(request, media_id):
-    add_map("mediaId", media_id)
-    user_id = get_current_user(request)["id"]
-    add_map("userId", user_id)
+    variables = {}
     token = get_current_token(request)
-    response = api_call(PROGRESS_QUERY, token)
+    if token is None:
+        return None
+    variables["mediaId"] = media_id
+    user_id = get_current_user(request)["id"]
+    variables["userId"] = user_id
+    response = api_call(PROGRESS_QUERY, token, variables)
+    if response is None:
+        return None
     return response.json()["data"]["MediaList"]
