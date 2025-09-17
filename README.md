@@ -1,4 +1,4 @@
-Anilist website clone using FastAPI.
+Unofficial Anilist website clone using FastAPI for learning purposes.
 
 Currently handles:
 - Logging in
