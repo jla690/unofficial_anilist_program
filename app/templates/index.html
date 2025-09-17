@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Home | AniList Local{% endblock %}
+{% block title %}Home | Unofficial AniList Local{% endblock %}
 {% block content %}
 <section class="hero">
-    <h1 class="hero-title">AniList Local</h1>
+    <h1 class="hero-title">Unofficial AniList Local</h1>
     <p class="hero-subtitle">A personal dashboard to search, track, and manage your anime & manga lists locally.</p>
     {% if not user %}
     <a class="btn primary large" href="/auth/login">Login with AniList</a>
@@ -11,7 +11,7 @@
         <a class="card-link" href="/search">
             <div class="card">
                 <h3>Search</h3>
-                <p>Find anime & manga metadata via AniList GraphQL.</p>
+                <p>Find anime & manga metadata.</p>
             </div>
         </a>
         <a class="card-link" href="/lists">

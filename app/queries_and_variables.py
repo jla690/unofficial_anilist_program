@@ -62,6 +62,8 @@ query Query($mediaId: Int) {
   id
     coverImage {
       extraLarge
+      large
+      medium
     }
     description
     status
