@@ -245,7 +245,7 @@ def token_conversion(code):
     return json_object
 
 # Gets all titles of user
-def get_all_titles(json_object):
+def extract_media_list(json_object):
     all_titles = []
     arrays = json_object["data"]["MediaListCollection"]["lists"]
     for arr in arrays:
@@ -305,7 +305,7 @@ def handle_all_manga(request):
     variables["type"] = "MANGA"
     response = api_call(LIST_FROM_USER_QUERY, token, variables)
     json_object = response.json()
-    formatted = get_all_titles(json_object)
+    formatted = extract_media_list(json_object)
     return formatted
 
 # Gets all anime of a current user
@@ -319,7 +319,7 @@ def handle_all_anime(request):
     variables["type"] = "ANIME"
     response = api_call(LIST_FROM_USER_QUERY, token, variables)
     json_object = response.json()
-    formatted = get_all_titles(json_object)
+    formatted = extract_media_list(json_object)
     return formatted
 
 # def handle_random_manga():
