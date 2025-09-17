@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -30,7 +29,6 @@ app = FastAPI()
 
 app.add_middleware(SessionMiddleware, SECRET_KEY)
 
-# Point directly to "static" and "templates" inside app/
 app.mount(
     "/static",
     StaticFiles(directory=BASE_DIR / "static"),
@@ -47,17 +45,15 @@ async def home(request: Request):
         {
             "request": request,
             "user": user_data,
-            "messages": [],
-            "now": __import__("datetime").datetime.utcnow
         }
     )
 
-
+# Builds login page and redirects to it
 @app.get("/auth/login", response_class=HTMLResponse)
 async def login(request: Request):
     return RedirectResponse(url=build_login_url())
 
-
+# Search page
 @app.get("/search", response_class=HTMLResponse)
 async def search(request: Request):
     search_value = request.query_params.get("search")
@@ -71,11 +67,10 @@ async def search(request: Request):
             "user": get_current_user(request),
             "search_value": search_value,
             "lists": search_results,
-            "messages": []
         }
     )
 
-
+# Callback url to get token
 @app.get("/auth/callback")
 async def callback(request: Request):
     code = request.query_params.get("code")
@@ -88,7 +83,7 @@ async def callback(request: Request):
     request.session["user"] = user_data
     return RedirectResponse(url="/")
 
-
+# Gets list of all manga/anime for the current user
 @app.get("/lists", response_class=HTMLResponse)
 async def lists(request: Request):
     media_type = request.query_params.get("type")
@@ -104,13 +99,12 @@ async def lists(request: Request):
             "request": request,
             "lists": all_titles,
             "user": get_current_user(request),
-            "messages": [],
             "type": media_type,
             "now": __import__("datetime").datetime.utcnow,
         },
     )
 
-
+# Gets details for title
 @app.get("/anime_detail/{media_id}", response_class=HTMLResponse)
 async def anime_detail(request: Request, media_id: int):
     anime_details = handle_details(request, media_id)
@@ -123,10 +117,10 @@ async def anime_detail(request: Request, media_id: int):
             "media": anime_details,
             "user": get_current_user(request),
             "user_data": user_progress,
-            "messages": []
         }
     )
 
+# For saving title progress to Anilist
 @app.post("/api/post/{media_id}/progress")
 async def save_progress(request: Request, media_id: int):
     form_data = await request.form()
@@ -144,7 +138,3 @@ async def save_progress(request: Request, media_id: int):
         return RedirectResponse(f"/anime_detail/{media_id}?success=1", status_code=303)
     else:
         return RedirectResponse(f"/anime_detail/{media_id}?success=0", status_code=303)
-
-
-if __name__ == "__main__":
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
