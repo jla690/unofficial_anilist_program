@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "bootstrap";
+import "./App.css";
+import Button from "./components/Button";
+import api from "./api";
+
+import { useEffect } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [userData, setUserData] = useState<any>(null);
+
+  const fetchLogin = async () => {
+    const currPath = window.location.href;
+    console.log(currPath);
+    try {
+      const loginResponse = await api.get("/auth/login");
+      const url = loginResponse.data["url"];
+      window.location.href = url;
+      const callbackResponse = await api.get("/auth/callback", {
+        params: { redirect: currPath },
+      });
+      console.log(callbackResponse);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchUserData = async () => {
+    try {
+      const userData = await api.get("/auth/userdata");
+      console.log(userData);
+      setUserData(userData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div>Unofficial Anilist App</div>
+      {!userData && <Button onClick={fetchLogin}>Login</Button>}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
