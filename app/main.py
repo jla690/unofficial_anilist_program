@@ -528,14 +528,12 @@ async def save_progress(request: Request, media_id: int):
             "success": True,
             "status_code": 303
         }
-        return RedirectResponse(f"/anime_detail/{media_id}?success=1", status_code=303)
     else:
         return {
             "success": False,
             "error": "Save Failed",
             "status_code": 303
         }
-        return RedirectResponse(f"/anime_detail/{media_id}?success=0", status_code=303)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
