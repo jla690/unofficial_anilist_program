@@ -1,5 +1,4 @@
 import React, { type ReactNode } from "react";
-import api from "../api";
 
 interface Props {
   children: ReactNode;
