@@ -401,7 +401,6 @@ def handle_progress(request, media_id):
     return response.json()["data"]["MediaList"]
 
 
-BASE_DIR = Path(__file__).resolve().parent  # this = app/
 
 app = FastAPI(debug=True)
 
