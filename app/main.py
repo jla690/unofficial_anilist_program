@@ -526,6 +526,8 @@ async def save_progress(request: Request, media_id: int):
     if title:
         return {
             "success": True,
+            "title": title
+        }
 
     else:
         return {
