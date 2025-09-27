@@ -1,16 +1,18 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "bootstrap";
 import "./App.css";
-import Button from "./components/Button";
 import api from "./api";
-
 import { useEffect } from "react";
+import Home from "./components/Home";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Search from "./components/Search";
+import Lists from "./components/Lists";
+import type { User } from "./types";
+import MediaDetail from "./components/MediaDetail";
 
 function App() {
   const [count, setCount] = useState(0);
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<User | null>(null);
 
   const fetchLogin = async () => {
     const currPath = window.location.href;
@@ -30,9 +32,8 @@ function App() {
 
   const fetchUserData = async () => {
     try {
-      const userData = await api.get("/auth/userdata");
-      console.log(userData);
-      setUserData(userData);
+      const response = await api.get("/auth/userdata");
+      setUserData(response.data["user"]);
     } catch (error) {
       console.log(error);
     }
@@ -43,10 +44,20 @@ function App() {
   }, []);
 
   return (
-    <>
-      <div>Unofficial Anilist App</div>
-      {!userData && <Button onClick={fetchLogin}>Login</Button>}
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home user={userData}></Home>}></Route>
+        <Route
+          path="/search"
+          element={<Search user={userData}></Search>}
+        ></Route>
+        <Route path="/lists" element={<Lists user={userData}></Lists>}></Route>
+        <Route
+          path="/media_detail/:media_id"
+          element={<MediaDetail user={userData}></MediaDetail>}
+        ></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

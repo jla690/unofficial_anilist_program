@@ -204,7 +204,7 @@ def get_current_user(request: Request):
 
 # Gets token stored in request, returns None if not found
 def get_current_token(request: Request):
-    token =  request.session.get("token")
+    token = request.session.get("token")
     if token is None:
         return None
     return token["access_token"]
@@ -498,13 +498,13 @@ async def lists(request: Request):
     }
 
 # Gets details for title
-@app.get("/anime_detail/{media_id}")
-async def anime_detail(request: Request, media_id: int):
-    anime_details = handle_details(request, media_id)
+@app.get("/media_detail/{media_id}")
+async def media_detail(request: Request, media_id: int):
+    media_details = handle_details(request, media_id)
     user_progress = handle_progress(request, media_id)
 
     return {
-        "media": anime_details,
+        "media": media_details,
         "user": get_current_user(request),
         "user_data": user_progress
     }
