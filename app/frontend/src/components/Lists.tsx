@@ -2,42 +2,14 @@ import React, { useEffect, useState, type ReactNode } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import BaseLayout from "./BaseLayout";
 import api from "../api";
-
-interface User {
-  about: string;
-  id: number;
-  bannerImage: string;
-  name: string;
-  avatar: {
-    medium: string;
-  };
-}
-
-interface ListItem {
-  id: number;
-  chapters?: number | null;
-  episodes?: number | null;
-  format?: string;
-  score: number;
-  progress: string;
-  countryOfOrigin: string;
-  status: string;
-  media: {
-    averageScore?: number;
-    title: {
-      english: string;
-      romaji: string;
-      native: string;
-    };
-  };
-}
+import type { User, UserListItem } from "../types";
 
 interface Props {
   user: User | null;
 }
 
 const Lists = ({ user }: Props) => {
-  const [lists, setLists] = useState<ListItem[] | null>(null);
+  const [lists, setLists] = useState<UserListItem[] | null>(null);
   const [searchParams] = useSearchParams();
   const type = searchParams.get("type") || "ANIME";
 
@@ -91,11 +63,11 @@ const Lists = ({ user }: Props) => {
               {lists.map((item) => (
                 <tr>
                   <td className="title-cell">
-                    <a href="/anime_detail/{{item.media.id}}">
+                    <Link to={"/media_detail/" + item.media.id}>
                       {item.media.title.english ||
                         item.media.title.romaji ||
                         item.media.title.native}
-                    </a>
+                    </Link>
                   </td>
                   <td>{item.media.averageScore || "—"}</td>
                   <td>{item.progress}</td>

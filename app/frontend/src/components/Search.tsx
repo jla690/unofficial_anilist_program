@@ -1,31 +1,7 @@
 import React, { useState, type ReactNode } from "react";
 import BaseLayout from "./BaseLayout";
 import api from "../api";
-
-interface User {
-  about: string;
-  id: number;
-  bannerImage: string;
-  name: string;
-  avatar: {
-    medium: string;
-  };
-}
-
-interface ListItem {
-  id: number;
-  averageScore: number;
-  chapters?: number | null;
-  episodes?: number | null;
-  format: string;
-  countryOfOrigin: string;
-  status: string;
-  title: {
-    english: string;
-    romaji: string;
-    native: string;
-  };
-}
+import type { User, SearchListItem } from "../types";
 
 interface Props {
   user: User | null;
@@ -33,7 +9,7 @@ interface Props {
 
 const Search = ({ user }: Props) => {
   const [query, setQuery] = useState("");
-  const [lists, setLists] = useState<ListItem[] | null>(null);
+  const [lists, setLists] = useState<SearchListItem[] | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async (e: React.FormEvent) => {

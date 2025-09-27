@@ -7,20 +7,12 @@ import Home from "./components/Home";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Search from "./components/Search";
 import Lists from "./components/Lists";
-
-interface UserData {
-  about: string;
-  id: number;
-  bannerImage: string;
-  name: string;
-  avatar: {
-    medium: string;
-  };
-}
+import type { User } from "./types";
+import MediaDetail from "./components/MediaDetail";
 
 function App() {
   const [count, setCount] = useState(0);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<User | null>(null);
 
   const fetchLogin = async () => {
     const currPath = window.location.href;
@@ -51,8 +43,6 @@ function App() {
     fetchUserData();
   }, []);
 
-  console.log(userData);
-
   return (
     <BrowserRouter>
       <Routes>
@@ -62,6 +52,10 @@ function App() {
           element={<Search user={userData}></Search>}
         ></Route>
         <Route path="/lists" element={<Lists user={userData}></Lists>}></Route>
+        <Route
+          path="/media_detail/:media_id"
+          element={<MediaDetail user={userData}></MediaDetail>}
+        ></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,15 +1,6 @@
 import React, { type ReactNode } from "react";
 import { Link } from "react-router-dom";
-
-interface User {
-  about: string;
-  id: number;
-  bannerImage: string;
-  name: string;
-  avatar: {
-    medium: string;
-  };
-}
+import type { User } from "../types";
 
 interface Props {
   user: User | null;
