@@ -204,7 +204,7 @@ def get_current_user(request: Request):
 
 # Gets token stored in request, returns None if not found
 def get_current_token(request: Request):
-    token =  request.session.get("token")
+    token = request.session.get("token")
     if token is None:
         return None
     return token["access_token"]
