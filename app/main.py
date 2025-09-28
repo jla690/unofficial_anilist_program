@@ -440,9 +440,7 @@ async def user_data(request: Request):
 # Builds login page and redirects to it
 @app.get("/auth/login")
 async def login():
-    return {
-        "url": build_login_url()
-    }
+    return RedirectResponse(build_login_url())
 
 # Search page
 @app.get("/search")
@@ -516,10 +514,14 @@ async def save_progress(request: Request, media_id: int):
     progress = form_data.get("progress")
     status = form_data.get("status")
     score = form_data.get("score")
-
-    request.session["progress"] = progress
-    request.session["status"] = status
-    request.session["score"] = score
+    
+    if progress:
+      request.session["progress"] = progress
+    if status:
+      request.session["status"] = status
+    if score:
+      request.session["score"] = score
+    print(progress, status, score)
 
     title = handle_saving(request, media_id)
 
