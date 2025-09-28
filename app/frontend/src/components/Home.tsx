@@ -20,32 +20,20 @@ interface Props {
 const Home = ({ user, children, messages }: Props) => {
   return (
     <BaseLayout user={user}>
-      <section className="hero">
+      <section className="hero flex flex-col justify-center items-center">
         <h1 className="hero-title">Unofficial AniList Local</h1>
-        <p className="hero-subtitle">
+        <p className="hero-subtitle text-center max-w-xl">
           A personal dashboard to search, track, and manage your anime & manga
           lists locally.
         </p>
-        {!user ? (
+        {!user && (
           <a className="btn primary large" href="/auth/login">
             Login with AniList
           </a>
-        ) : (
-          <div className="quick-links">
-            <a className="card-link" href="/search">
-              <div className="card">
-                <h3>Search</h3>
-                <p>Find anime & manga metadata.</p>
-              </div>
-            </a>
-            <a className="card-link" href="/lists">
-              <div className="card">
-                <h3>My Lists</h3>
-                <p>View & update your watching/reading progress.</p>
-              </div>
-            </a>
-          </div>
         )}
+      </section>
+      <section className="hero mt-6">
+        <h1 className="text-lg font-bold text-left">Trending</h1>
       </section>
     </BaseLayout>
   );
