@@ -41,7 +41,10 @@ const BaseLayout = ({ user, children, messages }: Props) => {
               </li>
             ) : (
               <li>
-                <a className="btn primary small" href="/auth/login">
+                <a
+                  className="btn primary small"
+                  href="http://localhost:8000/auth/login"
+                >
                   Login
                 </a>
               </li>

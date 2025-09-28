@@ -63,7 +63,7 @@ const Search = ({ user }: Props) => {
               {lists.map((item) => (
                 <tr key={item.id}>
                   <td className="title-cell">
-                    <a href={"/anime_detail/" + item.id}>
+                    <a href={"/media_detail/" + item.id}>
                       {item.title.english ||
                         item.title.romaji ||
                         item.title.native}

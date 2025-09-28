@@ -11,7 +11,6 @@ import type { User } from "./types";
 import MediaDetail from "./components/MediaDetail";
 
 function App() {
-  const [count, setCount] = useState(0);
   const [userData, setUserData] = useState<User | null>(null);
 
   const fetchLogin = async () => {

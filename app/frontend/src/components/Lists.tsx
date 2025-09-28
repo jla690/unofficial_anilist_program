@@ -48,7 +48,6 @@ const Lists = ({ user }: Props) => {
       </div>
       {lists ? (
         <section className="list-section">
-          <h3>{type === "MANGA" ? "All Manga" : "All Anime"}</h3>
           <table className="media-table">
             <thead>
               <tr>
@@ -61,7 +60,7 @@ const Lists = ({ user }: Props) => {
             </thead>
             <tbody>
               {lists.map((item) => (
-                <tr>
+                <tr key={item.media.id}>
                   <td className="title-cell">
                     <Link to={"/media_detail/" + item.media.id}>
                       {item.media.title.english ||

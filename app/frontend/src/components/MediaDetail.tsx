@@ -10,18 +10,21 @@ interface Props {
 
 const MediaDetail = ({ user }: Props) => {
   const [media, setMedia] = useState<Media | null>(null);
-  const [progress, setProgress] = useState<number | undefined>(undefined);
-  const [status, setStatus] = useState<string>("");
-  const [score, setScore] = useState<number | undefined>(undefined);
+  const [progress, setProgress] = useState<number | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const [score, setScore] = useState<number | null>(null);
 
   const mediaParams = useParams<{ media_id: string }>();
 
   const fetchMediaDetails = async () => {
     try {
-      console.log(mediaParams);
       const response = await api.get("/media_detail/" + mediaParams.media_id);
-      console.log(response.data);
       setMedia(response.data);
+      console.log(response.data);
+      setProgress(response.data.user_data?.progress ?? null);
+      setStatus(response.data.user_data?.status ?? null);
+      setScore(response.data.user_data?.score ?? null);
+      console.log(status);
     } catch (error) {
       console.log(error);
       setMedia(null);
@@ -33,6 +36,37 @@ const MediaDetail = ({ user }: Props) => {
       fetchMediaDetails();
     }
   }, [media]);
+
+  const appendIfExists = (
+    bodyFormData: FormData,
+    key: string,
+    value: number | string | null
+  ) => {
+    if (value != null) bodyFormData.append(key, value.toString());
+  };
+
+  const handleSaving = async () => {
+    var bodyFormData = new FormData();
+    appendIfExists(bodyFormData, "progress", progress);
+    appendIfExists(bodyFormData, "status", status);
+    appendIfExists(bodyFormData, "score", score);
+    try {
+      console.log(score);
+      const response = await api.post(
+        "/api/post/" + media?.media.id + "/progress",
+        bodyFormData
+      );
+      console.log(response.data);
+      if (response.data.success) {
+        alert("Successfully Saved");
+      } else {
+        alert("Error when saving");
+      }
+    } catch (error) {
+      alert("Did not successfully save");
+    }
+  };
+
   return (
     <BaseLayout user={user}>
       <article className="detail">
@@ -40,11 +74,7 @@ const MediaDetail = ({ user }: Props) => {
           <img
             alt="Cover"
             className="detail-cover"
-            src={
-              media?.media.coverImage.extraLarge ||
-              media?.media.coverImage?.extraLarge ||
-              ""
-            }
+            src={media?.media.coverImage.extraLarge || undefined}
           />
           <div className="detail-info">
             <h1>
@@ -57,11 +87,9 @@ const MediaDetail = ({ user }: Props) => {
               {media?.media.meanScore && (
                 <span className="badge score">{media.media.meanScore}</span>
               )}
-              {media?.user_data.status && (
-                <span
-                  className={`badge status-${media.user_data.status.toLowerCase()}`}
-                >
-                  {media.user_data.status}
+              {status && (
+                <span className={`badge status-${status.toLowerCase()}`}>
+                  {status}
                 </span>
               )}
               {media?.media.type && (
@@ -108,7 +136,7 @@ const MediaDetail = ({ user }: Props) => {
               className="inline-form"
               onSubmit={(e) => {
                 e.preventDefault();
-                // handle save logic here
+                handleSaving();
               }}
             >
               <input
@@ -117,11 +145,14 @@ const MediaDetail = ({ user }: Props) => {
                 placeholder="Progress"
                 min={0}
                 value={progress ?? ""}
-                onChange={(e) => setProgress(Number(e.target.value))}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setProgress(val === "" ? null : Number(val));
+                }}
               />
               <select
                 name="status"
-                value={status}
+                value={status ?? ""}
                 onChange={(e) => setStatus(e.target.value)}
               >
                 <option value="">Status</option>
@@ -137,10 +168,13 @@ const MediaDetail = ({ user }: Props) => {
                 name="score"
                 placeholder="Score"
                 min={0}
-                max={100}
+                max={10}
                 step={1}
                 value={score ?? ""}
-                onChange={(e) => setScore(Number(e.target.value))}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setScore(val === "" ? null : Number(val));
+                }}
               />
               <button className="btn small primary" type="submit">
                 Save

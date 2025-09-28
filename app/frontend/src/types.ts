@@ -65,8 +65,8 @@ export interface Media {
     type: string
   }
   user_data: {
-    progress: number
-    score: number
-    status: string
+    progress?: number
+    score?: number
+    status?: string
   }
 }
