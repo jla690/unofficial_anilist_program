@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "bootstrap";
+
 import "./App.css";
 import api from "./api";
 import { useEffect } from "react";
