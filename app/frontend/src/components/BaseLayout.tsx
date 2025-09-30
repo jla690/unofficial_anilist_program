@@ -14,8 +14,8 @@ const BaseLayout = ({ user, children, messages }: Props) => {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-gray-900">
-            UnofficialAniList<span className="text-blue-600">Local</span>
+          <Link to="/" className="text-xl font-bold text-blue-600">
+            Unofficial<span className="text-gray-900">AniListLocal</span>
           </Link>
 
           <nav className="flex items-center space-x-6">
@@ -56,8 +56,8 @@ const BaseLayout = ({ user, children, messages }: Props) => {
       </header>
 
       {/* Main Layout */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6 px-6 py-8">
-        <main className="lg:col-span-3">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-1 gap-6 px-6 py-8">
+        <main>
           {messages && messages.length > 0 && (
             <div className="mb-6 space-y-2">
               {messages.map((m, i) => (
@@ -76,19 +76,6 @@ const BaseLayout = ({ user, children, messages }: Props) => {
           )}
           {children}
         </main>
-
-        <aside className="lg:col-span-1">
-          <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <h3 className="font-semibold text-gray-900 mb-2">Status</h3>
-            {user ? (
-              <p className="text-gray-600 text-sm">
-                Logged in as <strong>{user.name}</strong>
-              </p>
-            ) : (
-              <p className="text-gray-600 text-sm">You are not logged in.</p>
-            )}
-          </div>
-        </aside>
       </div>
     </div>
   );
