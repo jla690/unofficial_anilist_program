@@ -1,4 +1,6 @@
-:root {
+@import "tailwindcss";
+
+@theme {
     --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     --radius-sm: 4px;
@@ -6,7 +8,28 @@
 
     --transition: 0.18s cubic-bezier(.4, .2, .2, 1);
 
-    /* Light theme */
+    --c-bg: #f8f9fb;
+    --c-bg-alt: #ffffff;
+    --c-surface: #ffffff;
+    --c-border: #dcdfe4;
+    --c-border-strong: #b5bcc5;
+    --c-text: #222;
+    --c-text-soft: #5b626b;
+    --c-accent: #425bff;
+    --c-accent-hover: #2748ff;
+    --c-danger: #c73535;
+    --c-muted: #6e7781;
+    --c-shadow: rgba(0, 0, 0, 0.06);
+}
+
+/* :root {
+    --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+
+    --transition: 0.18s cubic-bezier(.4, .2, .2, 1);
+
     --c-bg: #f8f9fb;
     --c-bg-alt: #ffffff;
     --c-surface: #ffffff;
@@ -193,22 +216,15 @@ img {
 }
 
 .hero-title {
-    margin: 0 0 .5rem;
-    font-size: 2.15rem;
-    line-height: 1.15;
+    @apply mt-[0] mx-[0] mb-[.5rem] text-[2.15rem] leading-[1.15re]
 }
 
 .hero-subtitle {
-    margin: .25rem 0 1rem;
-    color: var(--c-text-soft);
-    max-width: 50ch;
+    @apply mt-[.25rem] mx-[0] mb-[1rem] text-[c-text-soft] max-w-[50ch];
 }
 
 .quick-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 1rem;
-    margin-top: 1.25rem;
+    @apply grid grid-cols-[repeat(auto-fit,_minmax(230px,_1fr))] gap-4 mt-5;
 }
 
 .card {
@@ -224,13 +240,11 @@ img {
 }
 
 .card h3 {
-    margin: .25rem 0 .2rem;
-    font-size: 1.1rem;
+    @apply mt-[.25rem] mx-[0] mb-[.2rem] text-[1.1rem];
 }
 
 .card-link {
-    color: inherit;
-    display: block;
+    @apply [color:inherit] block;
 }
 
 .card-link .card:hover {
@@ -267,11 +281,6 @@ img {
     --btn-bg: var(--c-accent);
     --btn-color: #fff;
     --btn-border: var(--c-accent);
-}
-
-.btn.primary:hover {
-    background: var(--c-accent-hover);
-    border-color: var(--c-accent-hover);
 }
 
 .btn.outline {
@@ -663,17 +672,15 @@ hr {
     background: var(--c-border-strong);
 }
 
-/* Focus states */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
     outline: 2px solid var(--c-accent);
     outline-offset: 2px;
     border-radius: 4px;
 }
 
-/* Animations small enhancements */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation: none !important;
         transition: none !important;
     }
-}
+} */
