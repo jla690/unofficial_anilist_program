@@ -21,7 +21,6 @@ const Search = ({ user }: Props) => {
     setLoading(true);
     try {
       if (globalSearchCache[query]) {
-        console.log("successfully loaded cache");
         setLists([...(globalSearchCache[query] || [])]);
         return globalSearchCache[query];
       }
