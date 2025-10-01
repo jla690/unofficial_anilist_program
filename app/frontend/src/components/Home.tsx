@@ -20,21 +20,25 @@ interface Props {
 const Home = ({ user, children, messages }: Props) => {
   return (
     <BaseLayout user={user}>
-      <section className="hero flex flex-col justify-center items-center">
-        <h1 className="hero-title">Unofficial AniList Local</h1>
-        <p className="hero-subtitle text-center max-w-xl">
+      <div className="text-center py-16">
+        <h1 className="text-4xl font-bold text-gray-300 mb-4">
+          Unofficial AniList Local
+        </h1>
+        <p className="text-gray-300 mb-8 max-w-lg mx-auto">
           A personal dashboard to search, track, and manage your anime & manga
           lists locally.
         </p>
         {!user && (
-          <a className="btn primary large" href="/auth/login">
+          <button
+            className="bg-blue-600 hover:bg-blue-700 text-gray-300 px-6 py-3 rounded font-medium"
+            onClick={() =>
+              (window.location.href = "http://localhost:8000/auth/login")
+            }
+          >
             Login with AniList
-          </a>
+          </button>
         )}
-      </section>
-      <section className="hero mt-6">
-        <h1 className="text-lg font-bold text-left">Trending</h1>
-      </section>
+      </div>
     </BaseLayout>
   );
 };

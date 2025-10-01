@@ -10,55 +10,65 @@ interface Props {
 
 const BaseLayout = ({ user, children, messages }: Props) => {
   return (
-    <div data-theme="light" lang="en">
-      <header className="site-header">
-        <div className="brand">
-          <a className="logo" href="/">
-            UnofficialAniList<span className="accent">Local</span>
-          </a>
-        </div>
-        <nav className="main-nav">
-          <ul>
-            <li>
-              <Link to="/search">Search</Link>
-            </li>
-            <li>
-              <Link to="/lists">My Lists</Link>
-            </li>
+    <div className="min-h-screen bg-gray-900">
+      {/* Header */}
+      <header className="bg-gray-800 px-6 py-4 rounded-lg">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <Link to="/" className="text-xl font-bold text-blue-400">
+            Unofficial<span className="text-white">AniListLocal</span>
+          </Link>
+
+          <nav className="flex items-center space-x-6">
+            <Link to="/search" className="text-gray-300 hover:text-gray-100">
+              Search
+            </Link>
+            <Link to="/lists" className="text-gray-300 hover:text-gray-100">
+              My Lists
+            </Link>
+
             {user ? (
-              <li className="user-block">
+              <div className="flex items-center space-x-3">
                 {user.avatar.medium && (
                   <img
                     alt={user.name}
-                    className="avatar"
+                    className="w-7 h-7 rounded-full"
                     src={user.avatar.medium}
                   />
                 )}
-                <span className="username">{user.name}</span>
-                <a className="btn small outline" href="/auth/logout">
+                <span className="text-gray-300">{user.name}</span>
+                <a
+                  className="bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded text-sm"
+                  href="/auth/logout"
+                >
                   Logout
                 </a>
-              </li>
+              </div>
             ) : (
-              <li>
-                <a
-                  className="btn primary small"
-                  href="http://localhost:8000/auth/login"
-                >
-                  Login
-                </a>
-              </li>
+              <a
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
+                href="http://localhost:8000/auth/login"
+              >
+                Login
+              </a>
             )}
-          </ul>
-        </nav>
+          </nav>
+        </div>
       </header>
 
-      <div className="layout">
-        <main className="content">
+      {/* Main Layout */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-1 gap-6 px-6 py-8">
+        <main>
           {messages && messages.length > 0 && (
-            <div className="messages">
+            <div className="mb-6 space-y-2">
               {messages.map((m, i) => (
-                <div key={i} className={`message ${m.category ?? "info"}`}>
+                <div
+                  key={i}
+                  className={`p-3 rounded ${
+                    m.category === "error"
+                      ? "bg-red-100 text-red-700"
+                      : "bg-blue-100 text-blue-700"
+                  }`}
+                >
                   {m.text}
                 </div>
               ))}
@@ -66,18 +76,6 @@ const BaseLayout = ({ user, children, messages }: Props) => {
           )}
           {children}
         </main>
-        <aside className="sidebar">
-          <section className="panel">
-            <h3>Status</h3>
-            {user ? (
-              <p>
-                Logged in as <strong>{user.name}</strong>
-              </p>
-            ) : (
-              <p>You are not logged in.</p>
-            )}
-          </section>
-        </aside>
       </div>
     </div>
   );
