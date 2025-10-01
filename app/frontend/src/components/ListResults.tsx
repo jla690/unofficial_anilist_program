@@ -32,7 +32,7 @@ const ListResults = ({ lists }: Props) => {
         <tbody className="bg-gray-800 divide-y divide-gray-700">
           {lists.map((item) => (
             <tr key={item.media.id} className="hover:bg-gray-700">
-              <td className="title-cell">
+              <td className="px-6 py-4 text-sm text-gray-300">
                 <Link
                   to={"/media_detail/" + item.media.id}
                   className="text-blue-500 hover:text-blue-600 font-medium"
