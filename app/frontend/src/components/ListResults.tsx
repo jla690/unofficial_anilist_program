@@ -8,7 +8,7 @@ interface Props {
 
 const ListResults = ({ lists }: Props) => {
   return (
-    <div className="text-gray overflow-x-auto">
+    <div className="text-gray-300 overflow-x-auto">
       <table className="w-full table-auto">
         <thead className="border-b border-gray-700">
           <tr>
