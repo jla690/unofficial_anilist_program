@@ -56,7 +56,7 @@ const SearchResults = ({ lists }: Props) => {
                 <td className="px-6 py-4 text-sm text-gray-300">
                   {item.chapters || item.episodes || "—"}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-gray-300">
                   <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-500 text-gray-300">
                     {item.format}
                   </span>
