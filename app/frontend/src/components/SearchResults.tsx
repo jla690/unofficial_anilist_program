@@ -1,4 +1,3 @@
-import React from "react";
 import type { SearchListItem } from "../types";
 
 interface Props {
@@ -7,8 +6,8 @@ interface Props {
 
 const SearchResults = ({ lists }: Props) => {
   return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-900">
+    <div className="bg-gray-800 rounded-lg overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-700">
         <h3 className="text-lg font-semibold text-gray-300">
           Search Results ({lists.length})
         </h3>
@@ -17,7 +16,7 @@ const SearchResults = ({ lists }: Props) => {
       <div className="overflow-x-auto">
         <table className="w-full table-auto">
           <thead className="bg-gray-800">
-            <tr>
+            <tr className="border-b border-gray-700">
               <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Title
               </th>
@@ -38,7 +37,7 @@ const SearchResults = ({ lists }: Props) => {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-gray-800 divide-y divide-gray-600">
+          <tbody className="bg-gray-800 divide-y divide-gray-700">
             {lists.map((item) => (
               <tr key={item.id} className="hover:bg-gray-700">
                 <td className="px-6 py-4">

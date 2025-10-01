@@ -33,13 +33,13 @@ const Lists = ({ user }: Props) => {
 
   return (
     <BaseLayout user={user}>
-      <h2 className="text-2xl text-gray-900 font-bold mb-6">My Lists</h2>
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <h2 className="text-2xl text-gray-300 font-bold mb-6">My Lists</h2>
+      <div className="bg-gray-800 rounded-lg overflow-hidden">
         <Tabs type={type}></Tabs>
         {lists ? (
           <ListResults lists={lists}></ListResults>
         ) : (
-          <p className="mt-6 muted text-gray-900">Loading...</p>
+          <p className="mt-6 muted text-gray-300">Loading...</p>
         )}
       </div>
     </BaseLayout>

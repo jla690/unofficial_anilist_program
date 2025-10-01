@@ -6,7 +6,7 @@ interface Props {
 
 const Tabs = ({ type }: Props) => {
   return (
-    <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+    <div className="text-sm font-medium text-center text-gray-400 border-b border-gray-600">
       <ul className="flex flex-wrap -mb-px justify-center">
         <li className="me-2">
           <a
