@@ -39,7 +39,7 @@ const Lists = ({ user }: Props) => {
         {lists ? (
           <ListResults lists={lists}></ListResults>
         ) : (
-          <p className="mt-6 muted text-gray-300">Loading...</p>
+          <p className="mt-6 mb-6 muted text-gray-300">Loading...</p>
         )}
       </div>
     </BaseLayout>
