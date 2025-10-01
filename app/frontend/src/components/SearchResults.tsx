@@ -7,72 +7,72 @@ interface Props {
 
 const SearchResults = ({ lists }: Props) => {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">
+    <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-900">
+        <h3 className="text-lg font-semibold text-gray-300">
           Search Results ({lists.length})
         </h3>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full table-auto">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-800">
             <tr>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Title
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Score
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Episodes/Chapters
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Format
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Country
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Status
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-gray-800 divide-y divide-gray-600">
             {lists.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-50">
+              <tr key={item.id} className="hover:bg-gray-700">
                 <td className="px-6 py-4">
                   <a
                     href={"/media_detail/" + item.id}
-                    className="text-blue-600 hover:text-blue-800 font-medium"
+                    className="text-blue-500 hover:text-blue-600 font-medium"
                   >
                     {item.title.english ||
                       item.title.romaji ||
                       item.title.native}
                   </a>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-gray-300">
                   {item.averageScore || "—"}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-gray-300">
                   {item.chapters || item.episodes || "—"}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-900">
-                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-500 text-gray-300">
                     {item.format}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-gray-300">
                   {item.countryOfOrigin}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-gray-300">
                   <span
                     className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       item.status === "FINISHED"
-                        ? "bg-green-100 text-green-800"
+                        ? "bg-green-700 text-gray-300"
                         : item.status === "RELEASING"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-gray-100 text-gray-800"
+                        ? "bg-blue-700 text-gray-300"
+                        : "bg-gray-700 text-gray-300"
                     }`}
                   >
                     {item.status}

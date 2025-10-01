@@ -1,29 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-    --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    --radius-sm: 4px;
-    --radius-md: 8px;
-
-    --transition: 0.18s cubic-bezier(.4, .2, .2, 1);
-
-    --c-bg: #f8f9fb;
-    --c-bg-alt: #ffffff;
-    --c-surface: #ffffff;
-    --c-border: #dcdfe4;
-    --c-border-strong: #b5bcc5;
-    --c-text: #222;
-    --c-text-soft: #5b626b;
-    --c-accent: #425bff;
-    --c-accent-hover: #2748ff;
-    --c-danger: #c73535;
-    --c-muted: #6e7781;
-    --c-shadow: rgba(0, 0, 0, 0.06);
+    --c-bg: #111827;
+    --c-bg-alt: #181b21;
+    --c-surface: #1e232b;
+    --c-border: #2c323b;
+    --c-border-strong: #404a55;
+    --c-text: #f2f4f7;
+    --c-text-soft: #b6bec9;
+    --c-accent: #6986ff;
+    --c-accent-hover: #7e96ff;
+    --c-danger: #ff5d5d;
+    --c-muted: #88939e;
+    --c-shadow: rgba(0, 0, 0, 0.5);
 }
 
-::selection {
-    background-color: rgb(164, 217, 241);
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #111827; /* Same as bg-gray-900 */
+}
+
+* {
+  box-sizing: border-box;
 }
 
 /* :root {

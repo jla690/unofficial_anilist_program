@@ -10,19 +10,19 @@ interface Props {
 
 const BaseLayout = ({ user, children, messages }: Props) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
+      <header className="bg-gray-800 px-6 py-4 rounded-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-blue-600">
-            Unofficial<span className="text-gray-900">AniListLocal</span>
+          <Link to="/" className="text-xl font-bold text-blue-400">
+            Unofficial<span className="text-white">AniListLocal</span>
           </Link>
 
           <nav className="flex items-center space-x-6">
-            <Link to="/search" className="text-gray-600 hover:text-gray-900">
+            <Link to="/search" className="text-gray-300 hover:text-gray-100">
               Search
             </Link>
-            <Link to="/lists" className="text-gray-600 hover:text-gray-900">
+            <Link to="/lists" className="text-gray-300 hover:text-gray-100">
               My Lists
             </Link>
 
@@ -31,13 +31,13 @@ const BaseLayout = ({ user, children, messages }: Props) => {
                 {user.avatar.medium && (
                   <img
                     alt={user.name}
-                    className="w-8 h-8 rounded-full"
+                    className="w-7 h-7 rounded-full"
                     src={user.avatar.medium}
                   />
                 )}
-                <span className="text-gray-700">{user.name}</span>
+                <span className="text-gray-300">{user.name}</span>
                 <a
-                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded text-sm"
+                  className="bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded text-sm"
                   href="/auth/logout"
                 >
                   Logout
@@ -45,7 +45,7 @@ const BaseLayout = ({ user, children, messages }: Props) => {
               </div>
             ) : (
               <a
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
                 href="http://localhost:8000/auth/login"
               >
                 Login

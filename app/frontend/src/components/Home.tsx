@@ -21,10 +21,10 @@ const Home = ({ user, children, messages }: Props) => {
   return (
     <BaseLayout user={user}>
       <div className="text-center py-16">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl font-bold text-white mb-4">
           Unofficial AniList Local
         </h1>
-        <p className="text-gray-600 mb-8 max-w-lg mx-auto">
+        <p className="text-gray-300 mb-8 max-w-lg mx-auto">
           A personal dashboard to search, track, and manage your anime & manga
           lists locally.
         </p>
