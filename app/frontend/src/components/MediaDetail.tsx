@@ -1,0 +1,210 @@
+import React, { useEffect, useState } from "react";
+import BaseLayout from "./BaseLayout";
+import type { Media, User } from "../types";
+import api from "../api";
+import { useParams } from "react-router-dom";
+import UserStatusBadge from "./UserStatusBadge";
+
+interface Props {
+  user: User | null;
+}
+
+const MediaDetail = ({ user }: Props) => {
+  const [media, setMedia] = useState<Media | null>(null);
+  const [progress, setProgress] = useState<number | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const [score, setScore] = useState<number | null>(null);
+
+  const mediaParams = useParams<{ media_id: string }>();
+
+  const fetchMediaDetails = async () => {
+    try {
+      const response = await api.get("/media_detail/" + mediaParams.media_id);
+      setMedia(response.data);
+      console.log(response.data);
+      setProgress(response.data.user_data?.progress ?? null);
+      setStatus(response.data.user_data?.status ?? null);
+      setScore(response.data.user_data?.score ?? null);
+      console.log(status);
+    } catch (error) {
+      console.log(error);
+      setMedia(null);
+    }
+  };
+
+  useEffect(() => {
+    if (!media) {
+      fetchMediaDetails();
+    }
+  }, [media]);
+
+  const appendIfExists = (
+    bodyFormData: FormData,
+    key: string,
+    value: number | string | null
+  ) => {
+    if (value != null) bodyFormData.append(key, value.toString());
+  };
+
+  const handleSaving = async () => {
+    var bodyFormData = new FormData();
+    appendIfExists(bodyFormData, "progress", progress);
+    appendIfExists(bodyFormData, "status", status);
+    appendIfExists(bodyFormData, "score", score);
+    try {
+      console.log(score);
+      const response = await api.post(
+        "/api/post/" + media?.media.id + "/progress",
+        bodyFormData
+      );
+      console.log(response.data);
+      if (response.data.success) {
+        alert("Successfully Saved");
+      } else {
+        alert("Error when saving");
+      }
+    } catch (error) {
+      alert("Did not successfully save");
+    }
+  };
+
+  return (
+    <BaseLayout user={user}>
+      <article className="bg-gray-800 rounded-lg max-h-full grid grid-cols-5">
+        <div className="col-span-1 pl-5 pt-5 mb-5 pr-5">
+          <img
+            alt="Cover"
+            className="w-full rounded-lg object-cover"
+            src={media?.media.coverImage.extraLarge || undefined}
+          />
+        </div>
+
+        <div className="col-span-4">
+          <h1 className="text-center font-bold mb-5 mt-5 text-xl">
+            {media?.media.title.english ||
+              media?.media.title.romaji ||
+              media?.media.title.native ||
+              ""}
+          </h1>
+          <div className="flex justify-center gap-2">
+            {
+              <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 text-gray-100">
+                {"SITE SCORE: " + (media?.media.meanScore ?? "N/A")}
+              </span>
+            }
+            {<UserStatusBadge status={status}></UserStatusBadge>}
+            {media?.media.type && (
+              <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 text-gray-100">
+                {media.media.type}
+              </span>
+            )}
+          </div>
+          <p className="mt-10 mb-10 mx-10 text-left">
+            {media?.media.description
+              ? media?.media.description.replace(/<[^>]+>/g, "")
+              : ""}
+          </p>
+          <p className="meta-line">
+            {media?.media.episodes && (
+              <span>
+                <strong>Episodes:</strong> {media.media.episodes}
+              </span>
+            )}
+            {media?.media.chapters && (
+              <span>
+                {" "}
+                <strong>Chapters:</strong> {media.media.chapters}
+              </span>
+            )}
+            {media?.media.volumes && (
+              <span>
+                {" "}
+                <strong>Volumes:</strong> {media.media.volumes}
+              </span>
+            )}
+          </p>
+          {media?.media.genres && (
+            <p className="genres">
+              {media.media.genres.map((g) => (
+                <span
+                  className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 justify-center mx-1 mb-5"
+                  key={g}
+                >
+                  {g}
+                </span>
+              ))}
+            </p>
+          )}
+          <form
+            className=""
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSaving();
+            }}
+          >
+            <input
+              className="bg-gray-700 rounded-lg px-1 mx-2"
+              type="number"
+              name="progress"
+              placeholder="Progress"
+              min={0}
+              value={progress ?? ""}
+              onChange={(e) => {
+                const val = e.target.value;
+                setProgress(val === "" ? null : Number(val));
+              }}
+            />
+            <select
+              className="bg-gray-700 rounded-lg px-1 mx-2"
+              name="status"
+              value={status ?? ""}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value="">Status</option>
+              <option value="CURRENT">CURRENT</option>
+              <option value="PLANNING">PLANNING</option>
+              <option value="COMPLETED">COMPLETED</option>
+              <option value="PAUSED">PAUSED</option>
+              <option value="DROPPED">DROPPED</option>
+              <option value="REPEATING">REPEATING</option>
+            </select>
+            <input
+              className="bg-gray-700 rounded-lg px-1 mx-2"
+              type="number"
+              name="score"
+              placeholder="Score"
+              min={0}
+              max={10}
+              step={1}
+              value={score ?? ""}
+              onChange={(e) => {
+                const val = e.target.value;
+                setScore(val === "" ? null : Number(val));
+              }}
+            />
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
+              type="submit"
+            >
+              Save
+            </button>
+          </form>
+          {media?.media.siteUrl && (
+            <p>
+              <a
+                className="text-blue-500 hover:text-blue-600 font-medium"
+                href={media.media.siteUrl}
+                rel="noopener"
+                target="_blank"
+              >
+                View on AniList →
+              </a>
+            </p>
+          )}
+        </div>
+      </article>
+    </BaseLayout>
+  );
+};
+
+export default MediaDetail;
