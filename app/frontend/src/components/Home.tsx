@@ -29,14 +29,12 @@ const Home = ({ user, children, messages }: Props) => {
           lists locally.
         </p>
         {!user && (
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-gray-300 px-6 py-3 rounded font-medium"
-            onClick={() =>
-              (window.location.href = "http://localhost:8000/auth/login")
-            }
+          <a
+            className="bg-blue-600 hover:bg-blue-700 text-gray-300 px-6 py-4 rounded font-medium"
+            href="http://localhost:8000/auth/login"
           >
             Login with AniList
-          </button>
+          </a>
         )}
       </div>
     </BaseLayout>
