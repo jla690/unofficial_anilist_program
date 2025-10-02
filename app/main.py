@@ -458,9 +458,9 @@ async def search_route(request: Request):
 
 @app.get("/auth/logout")
 async def logout(request: Request, redirect = "http://localhost:5173/"):
-    if request.session["token"]:
+    if "token" in request.session:
         del request.session["token"]
-    if request.session["user"]:
+    if "user" in request.session:
         del request.session["user"]
     return RedirectResponse(redirect)
 
