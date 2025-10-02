@@ -11,7 +11,7 @@ Currently handles:
 TODO:
 - Show trending media for anime and manga with thumbnails
 - Show more stuff on anime detail (should be trivial, just annoying)
-~~- Convert this to Javascript instead of Python, to learn different things~~
+- ~~Convert this to Javascript instead of Python, to learn different things~~
 
 DONE:
 - Converting to React/Typescript/Tailwind
