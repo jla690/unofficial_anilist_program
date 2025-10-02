@@ -1,3 +1,4 @@
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import type { SearchListItem } from "../types";
 
 interface Props {
@@ -57,12 +58,20 @@ const SearchResults = ({ lists }: Props) => {
                   {item.chapters || item.episodes || "—"}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-300">
-                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-500 text-gray-300">
+                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 text-gray-300">
                     {item.format}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-300">
-                  {item.countryOfOrigin}
+                  {item.countryOfOrigin + " "}
+                  {(() => {
+                    try {
+                      const flag = getUnicodeFlagIcon(item.countryOfOrigin);
+                      return flag ? flag : "";
+                    } catch {
+                      return "";
+                    }
+                  })()}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-300">
                   <span

@@ -456,6 +456,15 @@ async def search_route(request: Request):
         "lists": search_results
     }
 
+@app.get("/auth/logout")
+async def logout(request: Request, redirect = "http://localhost:5173/"):
+    if "token" in request.session:
+        del request.session["token"]
+    if "user" in request.session:
+        del request.session["user"]
+    return RedirectResponse(redirect)
+
+
 # Callback url to get token
 @app.get("/auth/callback")
 async def callback(request: Request, redirect = "http://localhost:5173/"):

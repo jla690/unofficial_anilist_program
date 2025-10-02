@@ -38,7 +38,7 @@ const BaseLayout = ({ user, children, messages }: Props) => {
                 <span className="text-gray-300">{user.name}</span>
                 <a
                   className="bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded text-sm"
-                  href="/auth/logout"
+                  href="http://localhost:8000/auth/logout"
                 >
                   Logout
                 </a>

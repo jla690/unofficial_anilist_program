@@ -1,6 +1,7 @@
 import React from "react";
 import type { UserListItem } from "../types";
 import { Link } from "react-router-dom";
+import UserStatusBadge from "./UserStatusBadge";
 
 interface Props {
   lists: UserListItem[];
@@ -52,19 +53,7 @@ const ListResults = ({ lists }: Props) => {
                 {item.score * 10}
               </td>
               <td className="px-6 py-4 text-sm text-gray-300">
-                <span
-                  className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                    item.status === "CURRENT"
-                      ? "bg-green-700 text-gray-300"
-                      : item.status === "PLANNING"
-                      ? "bg-blue-700 text-gray-300"
-                      : item.status === "PAUSED"
-                      ? "bg-purple-700 text-gray-300"
-                      : "bg-pink-700 text-gray-300"
-                  }`}
-                >
-                  {item.status}
-                </span>
+                <UserStatusBadge status={item.status}></UserStatusBadge>
               </td>
             </tr>
           ))}
