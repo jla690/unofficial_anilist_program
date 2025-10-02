@@ -63,9 +63,15 @@ const SearchResults = ({ lists }: Props) => {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-300">
-                  {item.countryOfOrigin +
-                    " " +
-                    getUnicodeFlagIcon(item.countryOfOrigin)}
+                  {item.countryOfOrigin + " "}
+                  {(() => {
+                    try {
+                      const flag = getUnicodeFlagIcon(item.countryOfOrigin);
+                      return flag ? flag : "";
+                    } catch {
+                      return "";
+                    }
+                  })()}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-300">
                   <span
