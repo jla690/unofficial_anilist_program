@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import BaseLayout from "./BaseLayout";
 import type { Media, User } from "../types";
 import api from "../api";
@@ -18,26 +18,26 @@ const MediaDetail = ({ user }: Props) => {
 
   const mediaParams = useParams<{ media_id: string }>();
 
-  const fetchMediaDetails = async () => {
-    try {
-      const response = await api.get("/media_detail/" + mediaParams.media_id);
-      setMedia(response.data);
-      console.log(response.data);
-      setProgress(response.data.user_data?.progress ?? null);
-      setStatus(response.data.user_data?.status ?? null);
-      setScore(response.data.user_data?.score ?? null);
-      console.log(status);
-    } catch (error) {
-      console.log(error);
-      setMedia(null);
-    }
-  };
-
   useEffect(() => {
+    const fetchMediaDetails = async () => {
+      try {
+        const response = await api.get("/media_detail/" + mediaParams.media_id);
+        setMedia(response.data);
+        console.log(response.data);
+        setProgress(response.data.user_data?.progress ?? null);
+        setStatus(response.data.user_data?.status ?? null);
+        setScore(response.data.user_data?.score ?? null);
+        console.log(status);
+      } catch (error) {
+        console.log(error);
+        setMedia(null);
+      }
+    };
+
     if (!media) {
       fetchMediaDetails();
     }
-  }, [media]);
+  }, [media, mediaParams.media_id, status]);
 
   const appendIfExists = (
     bodyFormData: FormData,
@@ -142,16 +142,6 @@ const MediaDetail = ({ user }: Props) => {
               )}
             </label>
           </div>
-
-          <MediaForm
-            setProgress={setProgress}
-            setScore={setScore}
-            setStatus={setStatus}
-            score={score}
-            status={status}
-            progress={progress}
-            savingFunc={handleSaving}
-          ></MediaForm>
           {media?.media.siteUrl && (
             <p>
               <a
@@ -166,6 +156,19 @@ const MediaDetail = ({ user }: Props) => {
           )}
         </div>
       </article>
+      <section className="mt-10 grid grid-cols-10">
+        <div className="col-span-3 bg-gray-800">
+          <MediaForm
+            setProgress={setProgress}
+            setScore={setScore}
+            setStatus={setStatus}
+            score={score}
+            status={status}
+            progress={progress}
+            savingFunc={handleSaving}
+          ></MediaForm>
+        </div>
+      </section>
     </BaseLayout>
   );
 };
