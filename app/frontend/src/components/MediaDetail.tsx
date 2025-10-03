@@ -4,6 +4,7 @@ import type { Media, User } from "../types";
 import api from "../api";
 import { useParams } from "react-router-dom";
 import UserStatusBadge from "./UserStatusBadge";
+import MediaForm from "./MediaForm";
 
 interface Props {
   user: User | null;
@@ -70,16 +71,16 @@ const MediaDetail = ({ user }: Props) => {
 
   return (
     <BaseLayout user={user}>
-      <article className="bg-gray-800 rounded-lg max-h-full grid grid-cols-5">
-        <div className="col-span-1 pl-5 pt-5 mb-5 pr-5">
+      <article className="bg-gray-800 rounded-lg max-h-full grid grid-cols-10">
+        <div className="col-span-3 pl-5 pt-5 mb-5 pr-5">
           <img
             alt="Cover"
-            className="w-full rounded-lg object-cover"
+            className="w-full rounded-lg object-cover shadow-gray-900 shadow-lg"
             src={media?.media.coverImage.extraLarge || undefined}
           />
         </div>
 
-        <div className="col-span-4">
+        <div className="col-span-7">
           <h1 className="text-center font-bold mb-5 mt-5 text-xl">
             {media?.media.title.english ||
               media?.media.title.romaji ||
@@ -99,16 +100,16 @@ const MediaDetail = ({ user }: Props) => {
               </span>
             )}
           </div>
-          <p className="mt-10 mb-10 mx-10 text-left">
+          <p className="mt-8 mb-8 mx-8 text-left bg-gray-700 rounded-lg px-5 py-5">
             {media?.media.description
               ? media?.media.description.replace(/<[^>]+>/g, "")
-              : ""}
+              : "No description available."}
           </p>
-          <p className="meta-line">
+          <p className="mb-6">
             {media?.media.episodes && (
-              <span>
-                <strong>Episodes:</strong> {media.media.episodes}
-              </span>
+              <div className="font-bold">
+                {"Episodes: " + media?.media.episodes}
+              </div>
             )}
             {media?.media.chapters && (
               <span>
@@ -123,72 +124,25 @@ const MediaDetail = ({ user }: Props) => {
               </span>
             )}
           </p>
-          {media?.media.genres && (
-            <p className="genres">
-              {media.media.genres.map((g) => (
-                <span
-                  className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 justify-center mx-1 mb-5"
-                  key={g}
-                >
-                  {g}
-                </span>
-              ))}
-            </p>
-          )}
-          <form
-            className=""
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSaving();
-            }}
-          >
-            <input
-              className="bg-gray-700 rounded-lg px-1 mx-2"
-              type="number"
-              name="progress"
-              placeholder="Progress"
-              min={0}
-              value={progress ?? ""}
-              onChange={(e) => {
-                const val = e.target.value;
-                setProgress(val === "" ? null : Number(val));
-              }}
-            />
-            <select
-              className="bg-gray-700 rounded-lg px-1 mx-2"
-              name="status"
-              value={status ?? ""}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="">Status</option>
-              <option value="CURRENT">CURRENT</option>
-              <option value="PLANNING">PLANNING</option>
-              <option value="COMPLETED">COMPLETED</option>
-              <option value="PAUSED">PAUSED</option>
-              <option value="DROPPED">DROPPED</option>
-              <option value="REPEATING">REPEATING</option>
-            </select>
-            <input
-              className="bg-gray-700 rounded-lg px-1 mx-2"
-              type="number"
-              name="score"
-              placeholder="Score"
-              min={0}
-              max={10}
-              step={1}
-              value={score ?? ""}
-              onChange={(e) => {
-                const val = e.target.value;
-                setScore(val === "" ? null : Number(val));
-              }}
-            />
-            <button
-              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
-              type="submit"
-            >
-              Save
-            </button>
-          </form>
+          <div className="mb-8">
+            <label className="flex justify-center gap-2">
+              Genres:
+              {media?.media.genres && (
+                <p className="genres">
+                  {media.media.genres.map((g) => (
+                    <span
+                      className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 justify-center mx-1 mb-5"
+                      key={g}
+                    >
+                      {g}
+                    </span>
+                  ))}
+                </p>
+              )}
+            </label>
+          </div>
+          
+          <MediaForm setProgress={setProgress} setScore={setScore} setStatus={setStatus} score={score} status={status} progress={progress} savingFunc={handleSaving}></MediaForm>
           {media?.media.siteUrl && (
             <p>
               <a
