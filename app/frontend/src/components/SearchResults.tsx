@@ -79,8 +79,8 @@ const SearchResults = ({ lists }: Props) => {
                       item.status === "FINISHED"
                         ? "bg-green-700 text-gray-300"
                         : item.status === "RELEASING"
-                        ? "bg-blue-700 text-gray-300"
-                        : "bg-gray-700 text-gray-300"
+                          ? "bg-blue-700 text-gray-300"
+                          : "bg-gray-700 text-gray-300"
                     }`}
                   >
                     {item.status}

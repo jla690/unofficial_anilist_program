@@ -1,4 +1,3 @@
-import React from "react";
 import type { UserListItem } from "../types";
 import { Link } from "react-router-dom";
 import UserStatusBadge from "./UserStatusBadge";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BaseLayout from "./BaseLayout";
 import type { Media, User } from "../types";
 import api from "../api";
@@ -42,7 +42,7 @@ const MediaDetail = ({ user }: Props) => {
   const appendIfExists = (
     bodyFormData: FormData,
     key: string,
-    value: number | string | null
+    value: number | string | null,
   ) => {
     if (value != null) bodyFormData.append(key, value.toString());
   };
@@ -56,7 +56,7 @@ const MediaDetail = ({ user }: Props) => {
       console.log(score);
       const response = await api.post(
         "/api/post/" + media?.media.id + "/progress",
-        bodyFormData
+        bodyFormData,
       );
       console.log(response.data);
       if (response.data.success) {
@@ -65,6 +65,7 @@ const MediaDetail = ({ user }: Props) => {
         alert("Error when saving");
       }
     } catch (error) {
+      console.log(error);
       alert("Did not successfully save");
     }
   };
@@ -141,14 +142,22 @@ const MediaDetail = ({ user }: Props) => {
               )}
             </label>
           </div>
-          
-          <MediaForm setProgress={setProgress} setScore={setScore} setStatus={setStatus} score={score} status={status} progress={progress} savingFunc={handleSaving}></MediaForm>
+
+          <MediaForm
+            setProgress={setProgress}
+            setScore={setScore}
+            setStatus={setStatus}
+            score={score}
+            status={status}
+            progress={progress}
+            savingFunc={handleSaving}
+          ></MediaForm>
           {media?.media.siteUrl && (
             <p>
               <a
                 className="text-blue-500 hover:text-blue-600 font-medium"
                 href={media.media.siteUrl}
-                rel="noopener"
+                rel="noopener noreferrer"
                 target="_blank"
               >
                 View on AniList →
