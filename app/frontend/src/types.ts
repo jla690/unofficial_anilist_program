@@ -44,29 +44,29 @@ export interface SearchListItem {
 
 export interface Media {
   media: {
-    chapters?: number
+    chapters?: number;
     coverImage: {
-        extraLarge: string
-    }
-    description: string
-    episodes?: number
-    format: string
-    genres: string[]
-    meanScore: number
-    id: number
-    volumes: number
-    siteUrl: string
-    status: string
-    title: {
-        english: string;
-        romaji: string;
-        native: string;
+      extraLarge: string;
     };
-    type: string
-  }
+    description: string;
+    episodes?: number;
+    format: string;
+    genres: string[];
+    meanScore: number;
+    id: number;
+    volumes: number;
+    siteUrl: string;
+    status: string;
+    title: {
+      english: string;
+      romaji: string;
+      native: string;
+    };
+    type: string;
+  };
   user_data: {
-    progress?: number
-    score?: number
-    status?: string
-  }
+    progress?: number;
+    score?: number;
+    status?: string;
+  };
 }

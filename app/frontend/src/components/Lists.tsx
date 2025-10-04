@@ -1,5 +1,5 @@
-import React, { useEffect, useState, type ReactNode } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import BaseLayout from "./BaseLayout";
 import api from "../api";
 import type { User, UserListItem } from "../types";

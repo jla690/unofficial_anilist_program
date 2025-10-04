@@ -4,6 +4,9 @@ import type { Media, User } from "../types";
 import api from "../api";
 import { useParams } from "react-router-dom";
 import UserStatusBadge from "./UserStatusBadge";
+import MediaForm from "./MediaForm";
+import Characters from "./Characters";
+import Recommendations from "./Recommendations";
 
 interface Props {
   user: User | null;
@@ -17,31 +20,31 @@ const MediaDetail = ({ user }: Props) => {
 
   const mediaParams = useParams<{ media_id: string }>();
 
-  const fetchMediaDetails = async () => {
-    try {
-      const response = await api.get("/media_detail/" + mediaParams.media_id);
-      setMedia(response.data);
-      console.log(response.data);
-      setProgress(response.data.user_data?.progress ?? null);
-      setStatus(response.data.user_data?.status ?? null);
-      setScore(response.data.user_data?.score ?? null);
-      console.log(status);
-    } catch (error) {
-      console.log(error);
-      setMedia(null);
-    }
-  };
-
   useEffect(() => {
+    const fetchMediaDetails = async () => {
+      try {
+        const response = await api.get("/media_detail/" + mediaParams.media_id);
+        setMedia(response.data);
+        console.log(response.data);
+        setProgress(response.data.user_data?.progress ?? null);
+        setStatus(response.data.user_data?.status ?? null);
+        setScore(response.data.user_data?.score ?? null);
+        console.log(status);
+      } catch (error) {
+        console.log(error);
+        setMedia(null);
+      }
+    };
+
     if (!media) {
       fetchMediaDetails();
     }
-  }, [media]);
+  }, [media, mediaParams.media_id]);
 
   const appendIfExists = (
     bodyFormData: FormData,
     key: string,
-    value: number | string | null
+    value: number | string | null,
   ) => {
     if (value != null) bodyFormData.append(key, value.toString());
   };
@@ -55,7 +58,7 @@ const MediaDetail = ({ user }: Props) => {
       console.log(score);
       const response = await api.post(
         "/api/post/" + media?.media.id + "/progress",
-        bodyFormData
+        bodyFormData,
       );
       console.log(response.data);
       if (response.data.success) {
@@ -64,28 +67,33 @@ const MediaDetail = ({ user }: Props) => {
         alert("Error when saving");
       }
     } catch (error) {
+      console.log(error);
       alert("Did not successfully save");
     }
   };
 
   return (
     <BaseLayout user={user}>
-      <article className="bg-gray-800 rounded-lg max-h-full grid grid-cols-5">
-        <div className="col-span-1 pl-5 pt-5 mb-5 pr-5">
+      {/* Image */}
+      <article className="bg-gray-800 rounded-sm max-h-full grid grid-cols-10">
+        <div className="col-span-3 pl-5 pt-5 mb-5 pr-5">
           <img
             alt="Cover"
-            className="w-full rounded-lg object-cover"
+            className="w-full rounded-lg object-cover shadow-gray-900 shadow-lg"
             src={media?.media.coverImage.extraLarge || undefined}
           />
         </div>
 
-        <div className="col-span-4">
-          <h1 className="text-center font-bold mb-5 mt-5 text-xl">
+        {/* Title */}
+        <div className="col-span-7">
+          <h1 className="text-center font-bold mb-5 mt-5 text-xl px-5">
             {media?.media.title.english ||
               media?.media.title.romaji ||
               media?.media.title.native ||
               ""}
           </h1>
+
+          {/* Badges */}
           <div className="flex justify-center gap-2">
             {
               <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 text-gray-100">
@@ -99,16 +107,20 @@ const MediaDetail = ({ user }: Props) => {
               </span>
             )}
           </div>
-          <p className="mt-10 mb-10 mx-10 text-left">
+
+          {/* Description */}
+          <p className="mt-8 mb-8 mx-8 text-left bg-gray-700 rounded-sm px-5 py-5">
             {media?.media.description
               ? media?.media.description.replace(/<[^>]+>/g, "")
-              : ""}
+              : "No description available."}
           </p>
-          <p className="meta-line">
+
+          {/* Episodes, might get rid of this */}
+          <p className="mb-6">
             {media?.media.episodes && (
-              <span>
-                <strong>Episodes:</strong> {media.media.episodes}
-              </span>
+              <div className="font-medium">
+                {"Episodes: " + media?.media.episodes}
+              </div>
             )}
             {media?.media.chapters && (
               <span>
@@ -123,78 +135,33 @@ const MediaDetail = ({ user }: Props) => {
               </span>
             )}
           </p>
-          {media?.media.genres && (
-            <p className="genres">
-              {media.media.genres.map((g) => (
-                <span
-                  className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 justify-center mx-1 mb-5"
-                  key={g}
-                >
-                  {g}
-                </span>
-              ))}
-            </p>
-          )}
-          <form
-            className=""
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSaving();
-            }}
-          >
-            <input
-              className="bg-gray-700 rounded-lg px-1 mx-2"
-              type="number"
-              name="progress"
-              placeholder="Progress"
-              min={0}
-              value={progress ?? ""}
-              onChange={(e) => {
-                const val = e.target.value;
-                setProgress(val === "" ? null : Number(val));
-              }}
-            />
-            <select
-              className="bg-gray-700 rounded-lg px-1 mx-2"
-              name="status"
-              value={status ?? ""}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="">Status</option>
-              <option value="CURRENT">CURRENT</option>
-              <option value="PLANNING">PLANNING</option>
-              <option value="COMPLETED">COMPLETED</option>
-              <option value="PAUSED">PAUSED</option>
-              <option value="DROPPED">DROPPED</option>
-              <option value="REPEATING">REPEATING</option>
-            </select>
-            <input
-              className="bg-gray-700 rounded-lg px-1 mx-2"
-              type="number"
-              name="score"
-              placeholder="Score"
-              min={0}
-              max={10}
-              step={1}
-              value={score ?? ""}
-              onChange={(e) => {
-                const val = e.target.value;
-                setScore(val === "" ? null : Number(val));
-              }}
-            />
-            <button
-              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
-              type="submit"
-            >
-              Save
-            </button>
-          </form>
+
+          {/* Genre badges */}
+          <div className="mb-8">
+            <label className="flex justify-center gap-2 font-medium text-bold">
+              Genres:
+              {media?.media.genres && (
+                <p className="genres">
+                  {media.media.genres.map((g) => (
+                    <span
+                      className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 justify-center mx-1 mb-5"
+                      key={g}
+                    >
+                      {g}
+                    </span>
+                  ))}
+                </p>
+              )}
+            </label>
+          </div>
+
+          {/* AniList link */}
           {media?.media.siteUrl && (
             <p>
               <a
                 className="text-blue-500 hover:text-blue-600 font-medium"
                 href={media.media.siteUrl}
-                rel="noopener"
+                rel="noopener noreferrer"
                 target="_blank"
               >
                 View on AniList →
@@ -203,6 +170,33 @@ const MediaDetail = ({ user }: Props) => {
           )}
         </div>
       </article>
+
+      {/* Forms */}
+      <section className="mt-10 grid grid-cols-10">
+        <div className="col-span-2 bg-gray-800 rounded-sm">
+          <MediaForm
+            setProgress={setProgress}
+            setScore={setScore}
+            setStatus={setStatus}
+            score={score}
+            status={status}
+            progress={progress}
+            savingFunc={handleSaving}
+          ></MediaForm>
+        </div>
+
+        {/* Characters */}
+        <div className="col-span-8 bg-gray-800 rounded-sm ml-5">
+          <Characters></Characters>
+        </div>
+      </section>
+
+      {/* Recommendations */}
+      <section className="mt-10">
+        <div className="bg-gray-800 rounded-sm">
+          <Recommendations></Recommendations>
+        </div>
+      </section>
     </BaseLayout>
   );
 };

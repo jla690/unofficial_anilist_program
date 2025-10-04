@@ -1,4 +1,3 @@
-import React from "react";
 import type { UserListItem } from "../types";
 import { Link } from "react-router-dom";
 import UserStatusBadge from "./UserStatusBadge";
@@ -43,13 +42,13 @@ const ListResults = ({ lists }: Props) => {
                     item.media.title.native}
                 </Link>
               </td>
-              <td className="px-6 py-4 text-sm text-gray-300">
+              <td className="px-6 py-4 text-sm text-gray-300 font-medium">
                 {item.media.averageScore || "—"}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-300">
+              <td className="px-6 py-4 text-sm text-gray-300 font-medium">
                 {item.progress}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-300">
+              <td className="px-6 py-4 text-sm text-gray-300 font-medium">
                 {item.score * 10}
               </td>
               <td className="px-6 py-4 text-sm text-gray-300">
