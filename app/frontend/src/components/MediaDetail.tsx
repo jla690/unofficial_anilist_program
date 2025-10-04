@@ -39,7 +39,7 @@ const MediaDetail = ({ user }: Props) => {
     if (!media) {
       fetchMediaDetails();
     }
-  }, [media, mediaParams.media_id, status]);
+  }, [media, mediaParams.media_id]);
 
   const appendIfExists = (
     bodyFormData: FormData,
