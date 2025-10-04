@@ -5,6 +5,7 @@ import api from "../api";
 import { useParams } from "react-router-dom";
 import UserStatusBadge from "./UserStatusBadge";
 import MediaForm from "./MediaForm";
+import Characters from "./Characters";
 
 interface Props {
   user: User | null;
@@ -72,7 +73,7 @@ const MediaDetail = ({ user }: Props) => {
 
   return (
     <BaseLayout user={user}>
-      <article className="bg-gray-800 rounded-lg max-h-full grid grid-cols-10">
+      <article className="bg-gray-800 rounded-sm max-h-full grid grid-cols-10">
         <div className="col-span-3 pl-5 pt-5 mb-5 pr-5">
           <img
             alt="Cover"
@@ -82,7 +83,7 @@ const MediaDetail = ({ user }: Props) => {
         </div>
 
         <div className="col-span-7">
-          <h1 className="text-center font-bold mb-5 mt-5 text-xl">
+          <h1 className="text-center font-bold mb-5 mt-5 text-xl px-5">
             {media?.media.title.english ||
               media?.media.title.romaji ||
               media?.media.title.native ||
@@ -101,7 +102,7 @@ const MediaDetail = ({ user }: Props) => {
               </span>
             )}
           </div>
-          <p className="mt-8 mb-8 mx-8 text-left bg-gray-700 rounded-lg px-5 py-5">
+          <p className="mt-8 mb-8 mx-8 text-left bg-gray-700 rounded-sm px-5 py-5">
             {media?.media.description
               ? media?.media.description.replace(/<[^>]+>/g, "")
               : "No description available."}
@@ -157,7 +158,7 @@ const MediaDetail = ({ user }: Props) => {
         </div>
       </article>
       <section className="mt-10 grid grid-cols-10">
-        <div className="col-span-3 bg-gray-800">
+        <div className="col-span-2 bg-gray-800 rounded-sm">
           <MediaForm
             setProgress={setProgress}
             setScore={setScore}
@@ -167,6 +168,9 @@ const MediaDetail = ({ user }: Props) => {
             progress={progress}
             savingFunc={handleSaving}
           ></MediaForm>
+        </div>
+        <div className="col-span-8 bg-gray-800 rounded-sm ml-5">
+          <Characters></Characters>
         </div>
       </section>
     </BaseLayout>

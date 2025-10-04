@@ -27,16 +27,17 @@ const MediaForm = ({
         savingFunc();
       }}
     >
+      {/* Episodes */}
       <div>
         <label
-          htmlFor="episodeid"
-          className="mx-2 block text-sm font-medium mb-1"
+          htmlFor="episodeId"
+          className="mx-2 block text-sm font-medium mb-1 text-left pl-5"
         >
           Chapters/Episodes:
         </label>
         <input
-          id="episodeid"
-          className="bg-gray-700 rounded-lg px-1 mx-2 max-w-15"
+          id="episodeId"
+          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm"
           type="number"
           name="progress"
           placeholder="Progress"
@@ -48,10 +49,18 @@ const MediaForm = ({
           }}
         />
       </div>
-      <label className="mx-2">
-        Status:
+
+      {/* Status */}
+      <div>
+        <label
+          className="mx-2 block text-sm font-medium mb-1 text-left pl-5"
+          htmlFor="statusId"
+        >
+          Status:
+        </label>
         <select
-          className="bg-gray-700 rounded-lg px-1 mx-2"
+          id="statusId"
+          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm"
           name="status"
           value={status ?? ""}
           onChange={(e) => setStatus(e.target.value)}
@@ -64,11 +73,17 @@ const MediaForm = ({
           <option value="DROPPED">DROPPED</option>
           <option value="REPEATING">REPEATING</option>
         </select>
-      </label>
-      <label className="mx-2">
-        Score:
+      </div>
+      <div>
+        <label
+          className="mx-2 block text-sm font-medium mb-1 text-left pl-5"
+          htmlFor="scoreId"
+        >
+          Score:
+        </label>
         <input
-          className="bg-gray-700 rounded-lg px-1 mx-2 max-w-15"
+          id="scoreId"
+          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm"
           type="number"
           name="score"
           placeholder="Score"
@@ -81,9 +96,9 @@ const MediaForm = ({
             setScore(val === "" ? null : Number(val));
           }}
         />
-      </label>
+      </div>
       <button
-        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
+        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm mb-5"
         type="submit"
       >
         Save
