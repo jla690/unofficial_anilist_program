@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import UserStatusBadge from "./UserStatusBadge";
 import MediaForm from "./MediaForm";
 import Characters from "./Characters";
+import Recommendations from "./Recommendations";
 
 interface Props {
   user: User | null;
@@ -73,6 +74,7 @@ const MediaDetail = ({ user }: Props) => {
 
   return (
     <BaseLayout user={user}>
+      {/* Image */}
       <article className="bg-gray-800 rounded-sm max-h-full grid grid-cols-10">
         <div className="col-span-3 pl-5 pt-5 mb-5 pr-5">
           <img
@@ -82,6 +84,7 @@ const MediaDetail = ({ user }: Props) => {
           />
         </div>
 
+        {/* Title */}
         <div className="col-span-7">
           <h1 className="text-center font-bold mb-5 mt-5 text-xl px-5">
             {media?.media.title.english ||
@@ -89,6 +92,8 @@ const MediaDetail = ({ user }: Props) => {
               media?.media.title.native ||
               ""}
           </h1>
+
+          {/* Badges */}
           <div className="flex justify-center gap-2">
             {
               <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 text-gray-100">
@@ -102,14 +107,18 @@ const MediaDetail = ({ user }: Props) => {
               </span>
             )}
           </div>
+
+          {/* Description */}
           <p className="mt-8 mb-8 mx-8 text-left bg-gray-700 rounded-sm px-5 py-5">
             {media?.media.description
               ? media?.media.description.replace(/<[^>]+>/g, "")
               : "No description available."}
           </p>
+
+          {/* Episodes, might get rid of this */}
           <p className="mb-6">
             {media?.media.episodes && (
-              <div className="font-bold">
+              <div className="font-medium">
                 {"Episodes: " + media?.media.episodes}
               </div>
             )}
@@ -126,8 +135,10 @@ const MediaDetail = ({ user }: Props) => {
               </span>
             )}
           </p>
+
+          {/* Genre badges */}
           <div className="mb-8">
-            <label className="flex justify-center gap-2">
+            <label className="flex justify-center gap-2 font-medium text-bold">
               Genres:
               {media?.media.genres && (
                 <p className="genres">
@@ -143,6 +154,8 @@ const MediaDetail = ({ user }: Props) => {
               )}
             </label>
           </div>
+
+          {/* AniList link */}
           {media?.media.siteUrl && (
             <p>
               <a
@@ -157,6 +170,8 @@ const MediaDetail = ({ user }: Props) => {
           )}
         </div>
       </article>
+
+      {/* Forms */}
       <section className="mt-10 grid grid-cols-10">
         <div className="col-span-2 bg-gray-800 rounded-sm">
           <MediaForm
@@ -169,8 +184,17 @@ const MediaDetail = ({ user }: Props) => {
             savingFunc={handleSaving}
           ></MediaForm>
         </div>
+
+        {/* Characters */}
         <div className="col-span-8 bg-gray-800 rounded-sm ml-5">
           <Characters></Characters>
+        </div>
+      </section>
+
+      {/* Recommendations */}
+      <section className="mt-10">
+        <div className="bg-gray-800 rounded-sm">
+          <Recommendations></Recommendations>
         </div>
       </section>
     </BaseLayout>
