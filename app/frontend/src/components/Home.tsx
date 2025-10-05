@@ -1,23 +1,14 @@
 import { type ReactNode } from "react";
 import BaseLayout from "./BaseLayout";
+import type { User } from "../types";
 
-interface User {
-  about: string;
-  id: number;
-  bannerImage: string;
-  name: string;
-  avatar: {
-    medium: string;
-  };
-}
-
-interface Props {
+interface HomeProps {
   user: User | null;
   children?: ReactNode;
   messages?: { text: string; category?: string }[];
 }
 
-const Home = ({ user }: Props) => {
+const Home = ({ user }: HomeProps) => {
   return (
     <BaseLayout user={user}>
       <div className="text-center py-16">

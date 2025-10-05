@@ -92,6 +92,34 @@ query Query($mediaId: Int) {
     volumes
     genres
     format
+    recommendations(perPage: 10, sort: RATING_DESC) {
+      edges {
+        node {
+          mediaRecommendation {
+            id
+            title {
+              english romaji native
+            }
+            coverImage {
+              extraLarge
+            }
+          }
+        }
+      }
+    }
+    characters(page: 1, sort: ROLE) {
+      edges {
+        role
+        node {
+          name {
+            full
+          }
+          image {
+            large
+          }
+        }
+      }
+    }
   }
 }
 """

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BaseLayout from "./BaseLayout";
-import type { Media, User } from "../types";
+import type { Character, Recommendation, Media, User } from "../types";
 import api from "../api";
 import { useParams } from "react-router-dom";
 import UserStatusBadge from "./UserStatusBadge";
@@ -8,15 +8,19 @@ import MediaForm from "./MediaForm";
 import Characters from "./Characters";
 import Recommendations from "./Recommendations";
 
-interface Props {
+interface MediaDetailProps {
   user: User | null;
 }
 
-const MediaDetail = ({ user }: Props) => {
+const MediaDetail = ({ user }: MediaDetailProps) => {
   const [media, setMedia] = useState<Media | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [score, setScore] = useState<number | null>(null);
+  const [recommendations, setRecommendations] = useState<
+    Recommendation[] | null
+  >(null);
+  const [characters, setCharacters] = useState<Character[] | null>(null);
 
   const mediaParams = useParams<{ media_id: string }>();
 
@@ -25,7 +29,20 @@ const MediaDetail = ({ user }: Props) => {
       try {
         const response = await api.get("/media_detail/" + mediaParams.media_id);
         setMedia(response.data);
-        console.log(response.data);
+        setCharacters(
+          response.data.media.characters.edges.map((edge: any) => ({
+            image: edge.node.image.large,
+            name: edge.node.name.full,
+            role: edge.role,
+          })),
+        );
+        setRecommendations(
+          response.data.media.recommendations.edges.map((edge: any) => ({
+            id: edge.node.mediaRecommendation.id,
+            title: edge.node.mediaRecommendation.title,
+            coverImage: edge.node.mediaRecommendation.coverImage,
+          })),
+        );
         setProgress(response.data.user_data?.progress ?? null);
         setStatus(response.data.user_data?.status ?? null);
         setScore(response.data.user_data?.score ?? null);
@@ -187,14 +204,14 @@ const MediaDetail = ({ user }: Props) => {
 
         {/* Characters */}
         <div className="col-span-8 bg-gray-800 rounded-sm ml-5">
-          <Characters></Characters>
+          <Characters characters={characters}></Characters>
         </div>
       </section>
 
       {/* Recommendations */}
       <section className="mt-10">
         <div className="bg-gray-800 rounded-sm">
-          <Recommendations></Recommendations>
+          <Recommendations recommendations={recommendations}></Recommendations>
         </div>
       </section>
     </BaseLayout>

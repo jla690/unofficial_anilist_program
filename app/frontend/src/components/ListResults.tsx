@@ -2,11 +2,11 @@ import type { UserListItem } from "../types";
 import { Link } from "react-router-dom";
 import UserStatusBadge from "./UserStatusBadge";
 
-interface Props {
+interface ListResultsProps {
   lists: UserListItem[];
 }
 
-const ListResults = ({ lists }: Props) => {
+const ListResults = ({ lists }: ListResultsProps) => {
   return (
     <div className="text-gray-300 overflow-x-auto">
       <table className="w-full table-auto">

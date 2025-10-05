@@ -2,13 +2,13 @@ import { type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { User } from "../types";
 
-interface Props {
+interface BaseLayoutProps {
   user: User | null;
   children?: ReactNode;
   messages?: { text: string; category?: string }[];
 }
 
-const BaseLayout = ({ user, children, messages }: Props) => {
+const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Header */}

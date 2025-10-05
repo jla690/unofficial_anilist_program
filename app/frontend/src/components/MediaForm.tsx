@@ -1,6 +1,6 @@
 import React from "react";
 
-interface Props {
+interface MediaFormProps {
   savingFunc: () => Promise<void>;
   score: number | null;
   progress: number | null;
@@ -18,7 +18,7 @@ const MediaForm = ({
   setProgress,
   setScore,
   setStatus,
-}: Props) => {
+}: MediaFormProps) => {
   return (
     <form
       className="mt-6 space-y-4"

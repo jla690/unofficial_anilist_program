@@ -5,13 +5,13 @@ import type { User, SearchListItem } from "../types";
 import SearchResults from "./SearchResults";
 import { useSearchParams } from "react-router-dom";
 
-interface Props {
+interface SearchProps {
   user: User | null;
 }
 
 const globalSearchCache: { [query: string]: SearchListItem[] | null } = {};
 
-const Search = ({ user }: Props) => {
+const Search = ({ user }: SearchProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("query") ?? "");
   const [lists, setLists] = useState<SearchListItem[] | null>(null);
