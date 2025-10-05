@@ -6,7 +6,6 @@ interface CharacterCardProps {
 }
 
 const CharacterCard = ({ character }: CharacterCardProps) => {
-  console.log(character);
   return (
     <div className="mx-5 my-5">
       <img
