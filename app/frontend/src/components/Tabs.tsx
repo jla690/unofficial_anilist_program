@@ -1,8 +1,8 @@
-interface Props {
+interface TabsProps {
   type: string;
 }
 
-const Tabs = ({ type }: Props) => {
+const Tabs = ({ type }: TabsProps) => {
   return (
     <div className="text-sm font-medium text-center text-gray-400 border-b border-gray-600">
       <ul className="flex flex-wrap -mb-px justify-center">

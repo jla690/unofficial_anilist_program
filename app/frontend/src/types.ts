@@ -70,3 +70,21 @@ export interface Media {
     status?: string;
   };
 }
+
+export interface Recommendation {
+  id: number;
+  title: {
+    english: string;
+    romaji: string;
+    native: string;
+  };
+  coverImage: {
+    extraLarge: string;
+  };
+}
+
+export interface Character {
+  image: string;
+  name: string;
+  role: string;
+}

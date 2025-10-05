@@ -1,8 +1,8 @@
-interface Props {
+interface UserStatusBadgeProps {
   status: string | null;
 }
 
-const UserStatusBadge = ({ status }: Props) => {
+const UserStatusBadge = ({ status }: UserStatusBadgeProps) => {
   return (
     <span
       className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${

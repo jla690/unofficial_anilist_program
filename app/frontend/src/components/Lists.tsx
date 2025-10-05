@@ -6,11 +6,11 @@ import type { User, UserListItem } from "../types";
 import Tabs from "./Tabs";
 import ListResults from "./ListResults";
 
-interface Props {
+interface ListsProps {
   user: User | null;
 }
 
-const Lists = ({ user }: Props) => {
+const Lists = ({ user }: ListsProps) => {
   const [lists, setLists] = useState<UserListItem[] | null>(null);
   const [searchParams] = useSearchParams();
   const type = searchParams.get("type") || "ANIME";

@@ -1,11 +1,11 @@
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import type { SearchListItem } from "../types";
 
-interface Props {
+interface SearchResultsProps {
   lists: SearchListItem[];
 }
 
-const SearchResults = ({ lists }: Props) => {
+const SearchResults = ({ lists }: SearchResultsProps) => {
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-700">
