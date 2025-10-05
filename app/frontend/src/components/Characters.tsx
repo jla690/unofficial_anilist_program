@@ -9,9 +9,9 @@ interface CharacterProps {
 const Characters = ({ characters }: CharacterProps) => {
   return (
     <div className="grid grid-cols-6">
-      {characters?.map((character) => (
+      {characters?.map((character, idx) => (
         <CharacterCard
-          key={character.name}
+          key={idx}
           character={character}
         ></CharacterCard>
       ))}
