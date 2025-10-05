@@ -1,18 +1,17 @@
 Unofficial Anilist website local page using FastAPI for learning purposes.
 
-Currently handles:
+DONE:
 - Logging in
 - Checking user list of manga and anime
 - Searching
 - Saving title specific (progress, status, score)
 - Details of titles
-- 
+- Converting to React/Typescript/Tailwind
+- Logging out functionality
+- List of recommendations
+- List of characters
 
 TODO:
 - Show trending media for anime and manga with thumbnails
 - Show more stuff on anime detail (should be trivial, just annoying)
 - ~~Convert this to Javascript instead of Python, to learn different things~~
-
-DONE:
-- Converting to React/Typescript/Tailwind
-- Logging out functionality
