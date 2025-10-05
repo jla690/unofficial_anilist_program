@@ -71,6 +71,7 @@ export interface Media {
   };
 }
 
+// TODO: Maybe use omit/pick here instead of doing this
 export interface Recommendation {
   id: number;
   title: {
