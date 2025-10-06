@@ -1,4 +1,4 @@
-Unofficial Anilist website local page using FastAPI for learning purposes.
+Unofficial Anilist website local page using FastAPI/React/Tailwind CSS for learning purposes.
 
 DONE:
 - Logging in
