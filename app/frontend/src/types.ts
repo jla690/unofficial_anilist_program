@@ -63,6 +63,13 @@ export interface Media {
       native: string;
     };
     type: string;
+    bannerImage: string;
+    countryOfOrigin: string;
+    tags: Tag[];
+    stats: {
+      scoreDistribution: Score[];
+      statusDistribution: Status[];
+    };
   };
   user_data: {
     progress?: number;
@@ -88,4 +95,24 @@ export interface Character {
   image: string;
   name: string;
   role: string;
+}
+
+interface Score {
+  amount: number;
+  score: number;
+}
+
+interface Status {
+  amount: number;
+  status: string;
+}
+
+export interface MediaStats {
+  scoreDistribution: Score[];
+  statusDistribution: Status[];
+}
+
+export interface Tag {
+  name: string;
+  rank: number;
 }

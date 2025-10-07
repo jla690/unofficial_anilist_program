@@ -120,6 +120,22 @@ query Query($mediaId: Int) {
         }
       }
     }
+    bannerImage
+    countryOfOrigin
+    tags {
+      name
+      rank
+    }
+    stats {
+      scoreDistribution {
+        amount
+        score
+      }
+      statusDistribution {
+        amount
+        status
+      }
+    }
   }
 }
 """

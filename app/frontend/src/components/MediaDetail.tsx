@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import BaseLayout from "./BaseLayout";
-import type { Character, Recommendation, Media, User } from "../types";
+import type {
+  Character,
+  Recommendation,
+  Media,
+  User,
+  Tag,
+  MediaStats,
+} from "../types";
 import api from "../api";
 import { useParams } from "react-router-dom";
 import UserStatusBadge from "./UserStatusBadge";
 import MediaForm from "./MediaForm";
 import Characters from "./Characters";
 import Recommendations from "./Recommendations";
+import Tags from "./Tags";
 
 interface MediaDetailProps {
   user: User | null;
@@ -21,6 +30,8 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
     Recommendation[] | null
   >(null);
   const [characters, setCharacters] = useState<Character[] | null>(null);
+  const [tags, setTags] = useState<Tag[] | null>(null);
+  const [stats, setStats] = useState<MediaStats | null>(null);
 
   const mediaParams = useParams<{ media_id: string }>();
 
@@ -29,6 +40,7 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
       try {
         const response = await api.get("/media_detail/" + mediaParams.media_id);
         setMedia(response.data);
+        console.log(response.data);
         setCharacters(
           response.data.media.characters.edges.map((edge: any) => ({
             image: edge.node.image.large,
@@ -46,6 +58,9 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
         setProgress(response.data.user_data?.progress ?? null);
         setStatus(response.data.user_data?.status ?? null);
         setScore(response.data.user_data?.score ?? null);
+        setTags(response.data.media.tags);
+        setStats(response.data.media.stats);
+        console.log(response.data.media.stats);
         console.log(status);
       } catch (error) {
         console.log(error);
@@ -123,6 +138,11 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
                 {media.media.type}
               </span>
             )}
+            {media?.media.countryOfOrigin && (
+              <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 text-gray-100">
+                {getUnicodeFlagIcon(media.media.countryOfOrigin)}
+              </span>
+            )}
           </div>
 
           {/* Description */}
@@ -130,27 +150,6 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
             {media?.media.description
               ? media?.media.description.replace(/<[^>]+>/g, "")
               : "No description available."}
-          </p>
-
-          {/* Episodes, might get rid of this */}
-          <p className="mb-6">
-            {media?.media.episodes && (
-              <div className="font-medium">
-                {"Episodes: " + media?.media.episodes}
-              </div>
-            )}
-            {media?.media.chapters && (
-              <span>
-                {" "}
-                <strong>Chapters:</strong> {media.media.chapters}
-              </span>
-            )}
-            {media?.media.volumes && (
-              <span>
-                {" "}
-                <strong>Volumes:</strong> {media.media.volumes}
-              </span>
-            )}
           </p>
 
           {/* Genre badges */}
@@ -172,24 +171,47 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
             </label>
           </div>
 
-          {/* AniList link */}
-          {media?.media.siteUrl && (
-            <p>
-              <a
-                className="text-blue-500 hover:text-blue-600 font-medium"
-                href={media.media.siteUrl}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                View on AniList →
-              </a>
+          <div className="flex justify-center">
+            {/* Episodes, might get rid of this */}
+            <p className="mb-6 mx-5">
+              {media?.media.episodes && (
+                <div className="font-medium">
+                  {"Episodes: " + media?.media.episodes}
+                </div>
+              )}
+              {media?.media.chapters && (
+                <span>
+                  {" "}
+                  <strong>Chapters:</strong> {media.media.chapters}
+                </span>
+              )}
+              {media?.media.volumes && (
+                <span>
+                  {" "}
+                  <strong>Volumes:</strong> {media.media.volumes}
+                </span>
+              )}
             </p>
-          )}
+
+            {/* AniList link */}
+            {media?.media.siteUrl && (
+              <p>
+                <a
+                  className="text-blue-500 hover:text-blue-600 font-medium"
+                  href={media.media.siteUrl}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  View on AniList →
+                </a>
+              </p>
+            )}
+          </div>
         </div>
       </article>
 
       {/* Forms */}
-      <section className="mt-10 grid grid-cols-10">
+      <section className="mt-5 grid grid-cols-10">
         <div className="col-span-2 bg-gray-800 rounded-sm">
           <MediaForm
             setProgress={setProgress}
@@ -209,8 +231,11 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
       </section>
 
       {/* Recommendations */}
-      <section className="mt-10">
-        <div className="bg-gray-800 rounded-sm">
+      <section className="overflow-hidden grid grid-cols-10 mt-5">
+        <div className="bg-gray-800 rounded-sm col-span-2">
+          <Tags tags={tags}></Tags>
+        </div>
+        <div className="bg-gray-800 rounded-sm col-span-8 ml-5">
           <Recommendations recommendations={recommendations}></Recommendations>
         </div>
       </section>

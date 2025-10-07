@@ -11,7 +11,7 @@ const RecommendationCard = ({ recommendation }: RecommendationCardProps) => {
         <img
           alt="CardImage"
           src={recommendation.coverImage.extraLarge}
-          className="rounded-sm shadow-gray-900 shadow-lg"
+          className="rounded-sm shadow-gray-900 shadow-lg transition duration-300 ease-in-out hover:opacity-50 opacity-100"
         ></img>
       </a>
       <div className="mt-3 font-medium text-center">
