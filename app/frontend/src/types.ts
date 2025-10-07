@@ -65,10 +65,7 @@ export interface Media {
     type: string;
     bannerImage: string;
     countryOfOrigin: string;
-    tags: {
-      name: string;
-      rank: number;
-    };
+    tags: Tag[];
     stats: {
       scoreDistribution: {
         amount: number;
