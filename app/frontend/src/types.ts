@@ -67,14 +67,8 @@ export interface Media {
     countryOfOrigin: string;
     tags: Tag[];
     stats: {
-      scoreDistribution: {
-        amount: number;
-        score: number;
-      };
-      statusDistribution: {
-        amount: number;
-        status: string;
-      };
+      scoreDistribution: Score[];
+      statusDistribution: Status[];
     };
   };
   user_data: {
