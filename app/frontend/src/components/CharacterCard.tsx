@@ -8,7 +8,7 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
   return (
     <div className="mx-5 my-5">
       <img
-        className="rounded-sm shadow-gray-900 shadow-lg"
+        className="rounded-sm shadow-gray-900 shadow-lg transition duration-300 ease-in-out hover:opacity-50 opacity-100"
         alt="CharacterImage"
         src={character.image}
       ></img>

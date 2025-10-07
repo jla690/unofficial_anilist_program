@@ -37,7 +37,7 @@ const MediaForm = ({
         </label>
         <input
           id="episodeId"
-          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm"
+          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm block mx-auto"
           type="number"
           name="progress"
           placeholder="Progress"
@@ -60,12 +60,12 @@ const MediaForm = ({
         </label>
         <select
           id="statusId"
-          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm"
+          className="bg-gray-700 w-[11.75rem] rounded-sm block mx-auto"
           name="status"
           value={status ?? ""}
           onChange={(e) => setStatus(e.target.value)}
         >
-          <option value="">Status</option>
+          <option value="">None</option>
           <option value="CURRENT">CURRENT</option>
           <option value="PLANNING">PLANNING</option>
           <option value="COMPLETED">COMPLETED</option>
@@ -74,7 +74,7 @@ const MediaForm = ({
           <option value="REPEATING">REPEATING</option>
         </select>
       </div>
-      <div>
+      <div className="">
         <label
           className="mx-2 block text-sm font-medium mb-1 text-left pl-5"
           htmlFor="scoreId"
@@ -83,7 +83,7 @@ const MediaForm = ({
         </label>
         <input
           id="scoreId"
-          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm"
+          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm block mx-auto"
           type="number"
           name="score"
           placeholder="Score"
@@ -98,7 +98,7 @@ const MediaForm = ({
         />
       </div>
       <button
-        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm mb-5 font-medium"
+        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm mb-5 font-medium block mx-auto"
         type="submit"
       >
         Save

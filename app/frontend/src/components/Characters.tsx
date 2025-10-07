@@ -8,13 +8,13 @@ interface CharacterProps {
 
 const Characters = ({ characters }: CharacterProps) => {
   return (
-    <div className="grid grid-cols-6">
-      {characters?.map((character, idx) => (
-        <CharacterCard
-          key={idx}
-          character={character}
-        ></CharacterCard>
-      ))}
+    <div>
+      <h1 className="font-bold text-center text-xl mt-5">Characters</h1>
+      <div className="grid grid-cols-6">
+        {characters?.map((character, idx) => (
+          <CharacterCard key={idx} character={character}></CharacterCard>
+        ))}
+      </div>
     </div>
   );
 };
