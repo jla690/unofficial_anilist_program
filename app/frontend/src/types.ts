@@ -76,7 +76,7 @@ export interface Media {
       };
       statusDistribution: {
         amount: number;
-        score: number;
+        status: string;
       };
     };
   };
