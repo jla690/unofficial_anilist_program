@@ -13,6 +13,9 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
         src={character.image}
       ></img>
       <div className="mt-3 font-medium text-center">{character.name}</div>
+      <div className="mt-3 font-medium text-center text-sm text-gray-300">
+        {character.role}
+      </div>
     </div>
   );
 };
