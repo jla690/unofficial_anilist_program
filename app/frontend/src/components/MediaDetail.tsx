@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import BaseLayout from "./BaseLayout";
 import type {
@@ -16,6 +16,7 @@ import MediaForm from "./MediaForm";
 import Characters from "./Characters";
 import Recommendations from "./Recommendations";
 import Tags from "./Tags";
+import ScoreDistribution from "./ScoreDistribution";
 
 interface MediaDetailProps {
   user: User | null;
@@ -118,7 +119,7 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
 
         {/* Title */}
         <div className="col-span-7">
-          <h1 className="text-center font-bold mb-5 mt-5 text-xl px-5">
+          <h1 className="text-center font-bold mb-5 mt-5 text-3xl px-5">
             {media?.media.title.english ||
               media?.media.title.romaji ||
               media?.media.title.native ||
@@ -230,15 +231,17 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
         </div>
       </section>
 
-      {/* Recommendations */}
       <section className="overflow-hidden grid grid-cols-10 mt-5">
-        <div className="bg-gray-800 rounded-sm col-span-2">
+        {/* Tags */}
+        <div className="col-span-2">
           <Tags tags={tags}></Tags>
         </div>
+        {/* Recommendations */}
         <div className="bg-gray-800 rounded-sm col-span-8 ml-5">
           <Recommendations recommendations={recommendations}></Recommendations>
         </div>
       </section>
+      <ScoreDistribution stats={stats}></ScoreDistribution>
     </BaseLayout>
   );
 };

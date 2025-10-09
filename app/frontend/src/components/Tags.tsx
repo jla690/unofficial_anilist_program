@@ -8,10 +8,13 @@ interface TagsProps {
 const Tags = ({ tags }: TagsProps) => {
   return (
     <div>
-      <h1 className="font-bold text-center my-5">Tags</h1>
+      <h1 className="font-medium text-center my-5">Tags</h1>
       {tags &&
         tags.map((tag) => (
-          <section key={tag.name} className="flex justify-between mx-3 my-1">
+          <section
+            key={tag.name}
+            className="bg-gray-700 flex justify-between mx-3 my-2 px-2 rounded-md text-gray-300 hover:text-blue-400 transition duration-300"
+          >
             <div>{tag.name}</div>
             <div className="">{tag.rank + "%"}</div>
           </section>

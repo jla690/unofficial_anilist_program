@@ -37,7 +37,7 @@ const MediaForm = ({
         </label>
         <input
           id="episodeId"
-          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm block mx-auto"
+          className="bg-gray-700 px-1 w-[11.75rem] rounded-md block mx-auto text-gray-300"
           type="number"
           name="progress"
           placeholder="Progress"
@@ -60,7 +60,7 @@ const MediaForm = ({
         </label>
         <select
           id="statusId"
-          className="bg-gray-700 w-[11.75rem] rounded-sm block mx-auto"
+          className="bg-gray-700 w-[11.75rem] rounded-sm block mx-auto appearance-none text-gray-300"
           name="status"
           value={status ?? ""}
           onChange={(e) => setStatus(e.target.value)}
@@ -74,6 +74,8 @@ const MediaForm = ({
           <option value="REPEATING">REPEATING</option>
         </select>
       </div>
+
+      {/* Score */}
       <div className="">
         <label
           className="mx-2 block text-sm font-medium mb-1 text-left pl-5"
@@ -83,7 +85,7 @@ const MediaForm = ({
         </label>
         <input
           id="scoreId"
-          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm block mx-auto"
+          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm block mx-auto text-gray-300"
           type="number"
           name="score"
           placeholder="Score"
