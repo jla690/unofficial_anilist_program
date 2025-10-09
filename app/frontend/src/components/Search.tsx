@@ -63,7 +63,7 @@ const Search = ({ user }: SearchProps) => {
     <BaseLayout user={user}>
       <div className="space-y-6">
         {/* Header */}
-        <div>
+        <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-300 mb-2">Search</h2>
           <p className="text-gray-300">Search for your favourite anime/manga</p>
         </div>

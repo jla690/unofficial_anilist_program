@@ -9,7 +9,7 @@ const SearchResults = ({ lists }: SearchResultsProps) => {
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-300">
+        <h3 className="text-lg font-semibold text-gray-300 text-center">
           Search Results ({lists.length})
         </h3>
       </div>
@@ -18,22 +18,22 @@ const SearchResults = ({ lists }: SearchResultsProps) => {
         <table className="w-full table-auto">
           <thead className="bg-gray-800">
             <tr className="border-b border-gray-700">
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Title
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Score
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Episodes/Chapters
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Format
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Country
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Status
               </th>
             </tr>

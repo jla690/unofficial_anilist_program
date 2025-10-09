@@ -12,19 +12,19 @@ const ListResults = ({ lists }: ListResultsProps) => {
       <table className="w-full table-auto">
         <thead className="border-b border-gray-700">
           <tr>
-            <th className="text-xs text-gray-300 uppercase px-6 py-3 text-center font-medium">
+            <th className="text-xs text-gray-300 uppercase px-6 py-3 font-medium">
               Title
             </th>
-            <th className="text-xs text-gray-300 uppercase px-6 py-3 text-center font-medium">
+            <th className="text-xs text-gray-300 uppercase px-6 py-3 font-medium">
               Site Score
             </th>
-            <th className="text-xs text-gray-300 uppercase px-6 py-3 text-center font-medium">
+            <th className="text-xs text-gray-300 uppercase px-6 py-3 font-medium">
               Current Chapter/Episode
             </th>
-            <th className="text-xs text-gray-300 uppercase px-6 py-3 text-center font-medium">
+            <th className="text-xs text-gray-300 uppercase px-6 py-3 font-medium">
               User Score
             </th>
-            <th className="text-xs text-gray-300 uppercase px-6 py-3 text-center font-medium">
+            <th className="text-xs text-gray-300 uppercase px-6 py-3 text-left font-medium">
               Current Status
             </th>
           </tr>
