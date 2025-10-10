@@ -41,7 +41,9 @@ const Lists = ({ user }: ListsProps) => {
         {lists ? (
           <ListResults lists={lists}></ListResults>
         ) : (
-          <p className="mt-6 mb-6 muted text-gray-300">Loading...</p>
+          <p className="mt-6 mb-6 muted text-gray-300 text-center">
+            Loading...
+          </p>
         )}
       </div>
     </BaseLayout>

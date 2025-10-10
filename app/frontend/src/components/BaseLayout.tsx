@@ -18,7 +18,6 @@ const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
             Unofficial
             <span className="text-white font-medium">AniListLocal</span>
           </Link>
-
           <nav className="flex items-center space-x-6">
             <Link
               to="/search"
@@ -32,7 +31,8 @@ const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
             >
               My Lists
             </Link>
-
+          </nav>
+          <nav className="flex space-x-6">
             {user ? (
               <div className="flex items-center space-x-3">
                 {user.avatar.medium && (
