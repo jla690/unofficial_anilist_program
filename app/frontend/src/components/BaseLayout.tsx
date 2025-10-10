@@ -13,7 +13,7 @@ const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
     <div className="min-h-screen bg-gray-900">
       {/* Header */}
       <header className="bg-gray-800 px-6 py-4 rounded-lg">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w mx-auto flex justify-between">
           <Link to="/" className="text-xl font-bold text-blue-400">
             Unofficial
             <span className="text-white font-medium">AniListLocal</span>

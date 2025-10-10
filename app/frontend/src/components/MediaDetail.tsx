@@ -244,8 +244,10 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
           <Recommendations recommendations={recommendations}></Recommendations>
         </div>
       </section>
-      <ScoreDistribution stats={stats}></ScoreDistribution>
-      <StatusDistribution stats={stats}></StatusDistribution>
+      <section className="flex gap-x-5 mt-5">
+        <ScoreDistribution stats={stats}></ScoreDistribution>
+        <StatusDistribution stats={stats}></StatusDistribution>
+      </section>
     </BaseLayout>
   );
 };

@@ -8,7 +8,7 @@ interface TagsProps {
 const Tags = ({ tags }: TagsProps) => {
   return (
     <div>
-      <h1 className="font-medium text-center my-5">Tags</h1>
+      <h1 className="font-medium text-center my-5 text-gray-300">Tags</h1>
       {tags &&
         tags.map((tag) => (
           <section

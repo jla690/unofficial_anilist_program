@@ -95,7 +95,7 @@ const Search = ({ user }: SearchProps) => {
         {lists ? (
           <SearchResults lists={lists}></SearchResults>
         ) : (
-          <div className="text-center py-12">
+          <div className="text-center py-6">
             <p className="text-gray-300">
               No search results yet. Try searching for something!
             </p>

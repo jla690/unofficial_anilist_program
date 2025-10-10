@@ -9,30 +9,39 @@ import {
   YAxis,
 } from "recharts";
 import type { MediaStats } from "../types";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 interface ScoreDistributionProps {
   stats: MediaStats | null;
 }
 
 const ScoreDistribution = ({ stats }: ScoreDistributionProps) => {
+  const data =
+    stats?.scoreDistribution?.map((item) => ({
+      label: item.score,
+      value: item.amount,
+    })) ?? [];
+
   return (
-    <ResponsiveContainer width={"100%"} height={300}>
-      <BarChart
-        data={stats?.scoreDistribution}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <XAxis dataKey={"score"} />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey={"amount"} fill="#82ca9d" />
-      </BarChart>
-    </ResponsiveContainer>
+    <Card className="w-1/2 bg-gray-900">
+      <CardHeader>
+        <CardTitle className="text-center text-gray-300">
+          Score Distribution
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="h-50">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data}>
+              <XAxis dataKey="label" tick={{ fill: "#d1d5db" }} />
+              <YAxis tick={{ fill: "#d1d5db" }} />
+              <Tooltip />
+              <Bar dataKey="value" fill="#276CF5" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
