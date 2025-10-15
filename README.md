@@ -11,10 +11,10 @@ DONE:
 - List of recommendations
 - List of characters
 - docker is somewhat working... (reload doesn't work on vite)
+- Status and score distribution graph
+- List of media tags
+- Profile dropdown menu
 
 TODO:
-- Show trending media for anime and manga with thumbnails
-- Show more stuff on anime detail (should be trivial, just annoying)
-- ~~Convert this to Javascript instead of Python, to learn different things~~
-- use redis
-- fix graph
+- Show trending media for anime and manga with thumbnails (don't think this is possible)
+- use redis (not sure if this is worth implementing)
