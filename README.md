@@ -18,3 +18,5 @@ DONE:
 TODO:
 - Show trending media for anime and manga with thumbnails (don't think this is possible)
 - use redis (not sure if this is worth implementing)
+- filtering for list/search
+- 
