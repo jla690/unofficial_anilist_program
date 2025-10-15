@@ -15,13 +15,13 @@ const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
     <div className="min-h-screen bg-gray-900">
       {/* Header */}
       <header className="bg-gray-800 px-6 py-3">
-        <div className="max-w mx-auto flex justify-between items-center">
+        <div className="max-w-full mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-6">
             <Link to="/" className="text-xl font-bold text-blue-400">
               Unofficial
               <span className="text-white font-medium">AniListLocal</span>
             </Link>
-            <nav className="flex items-left space-x-6">
+            <nav className="flex items-start space-x-6">
               <Link
                 to="/search"
                 className="text-gray-300 hover:text-gray-100 font-medium"
@@ -38,7 +38,7 @@ const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
           </div>
           <nav className="flex space-x-6 items-center">
             {user ? (
-              <div className="flex group relative space-x-2 items-center">
+              <div className="flex group relative gap-2 items-center">
                 {user.avatar.medium && (
                   <img
                     alt={user.name}

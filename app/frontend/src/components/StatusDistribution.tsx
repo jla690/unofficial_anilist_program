@@ -34,7 +34,7 @@ const StatusDistribution = ({ stats }: StatusDistributionProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-50">
+        <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
               <XAxis dataKey="label" tick={{ fill: "#d1d5db" }} />
