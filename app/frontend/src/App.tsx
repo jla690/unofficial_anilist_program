@@ -7,6 +7,7 @@ import Search from "./components/Search";
 import Lists from "./components/Lists";
 import type { User } from "./types";
 import MediaDetail from "./components/MediaDetail";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   const [userData, setUserData] = useState<User | null>(null);
@@ -26,6 +27,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home user={userData}></Home>}></Route>
         <Route

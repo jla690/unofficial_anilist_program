@@ -17,6 +17,7 @@ import Characters from "./Characters";
 import Recommendations from "./Recommendations";
 import Tags from "./Tags";
 import ScoreDistribution from "./ScoreDistribution";
+import StatusDistribution from "./StatusDistribution";
 
 interface MediaDetailProps {
   user: User | null;
@@ -119,7 +120,7 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
 
         {/* Title */}
         <div className="col-span-7">
-          <h1 className="text-center font-bold mb-5 mt-5 text-3xl px-5">
+          <h1 className="text-center font-bold mb-5 mt-5 text-3xl px-5 text-gray-300">
             {media?.media.title.english ||
               media?.media.title.romaji ||
               media?.media.title.native ||
@@ -141,13 +142,15 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
             )}
             {media?.media.countryOfOrigin && (
               <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 text-gray-100">
-                {getUnicodeFlagIcon(media.media.countryOfOrigin)}
+                {media.media.countryOfOrigin +
+                  " " +
+                  getUnicodeFlagIcon(media.media.countryOfOrigin)}
               </span>
             )}
           </div>
 
           {/* Description */}
-          <p className="mt-8 mb-8 mx-8 text-left bg-gray-700 rounded-sm px-5 py-5">
+          <p className="mt-8 mb-8 mx-8 text-left bg-gray-700 rounded-sm px-5 py-5 text-gray-300">
             {media?.media.description
               ? media?.media.description.replace(/<[^>]+>/g, "")
               : "No description available."}
@@ -155,13 +158,13 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
 
           {/* Genre badges */}
           <div className="mb-8">
-            <label className="flex justify-center gap-2 font-medium text-bold">
+            <label className="flex justify-center gap-2 font-medium text-bold text-gray-300">
               Genres:
               {media?.media.genres && (
                 <p className="genres">
                   {media.media.genres.map((g) => (
                     <span
-                      className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 justify-center mx-1 mb-5"
+                      className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 justify-center mx-1 mb-5 text-white"
                       key={g}
                     >
                       {g}
@@ -172,7 +175,7 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
             </label>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center text-gray-300">
             {/* Episodes, might get rid of this */}
             <p className="mb-6 mx-5">
               {media?.media.episodes && (
@@ -212,7 +215,7 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
       </article>
 
       {/* Forms */}
-      <section className="mt-5 grid grid-cols-10">
+      <section className="mt-5 grid grid-cols-10 text-gray-300">
         <div className="col-span-2 bg-gray-800 rounded-sm">
           <MediaForm
             setProgress={setProgress}
@@ -237,11 +240,14 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
           <Tags tags={tags}></Tags>
         </div>
         {/* Recommendations */}
-        <div className="bg-gray-800 rounded-sm col-span-8 ml-5">
+        <div className="bg-gray-800 rounded-sm col-span-8 ml-5 text-gray-300">
           <Recommendations recommendations={recommendations}></Recommendations>
         </div>
       </section>
-      <ScoreDistribution stats={stats}></ScoreDistribution>
+      <section className="flex gap-x-5 mt-5">
+        <ScoreDistribution stats={stats}></ScoreDistribution>
+        <StatusDistribution stats={stats}></StatusDistribution>
+      </section>
     </BaseLayout>
   );
 };

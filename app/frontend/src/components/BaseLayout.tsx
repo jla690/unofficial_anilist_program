@@ -1,6 +1,8 @@
 import { type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { User } from "../types";
+import UserMenu from "./UserMenu";
+import { ChevronDown } from "lucide-react";
 
 interface BaseLayoutProps {
   user: User | null;
@@ -12,43 +14,40 @@ const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Header */}
-      <header className="bg-gray-800 px-6 py-4 rounded-lg">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-blue-400">
-            Unofficial
-            <span className="text-white font-medium">AniListLocal</span>
-          </Link>
-
-          <nav className="flex items-center space-x-6">
-            <Link
-              to="/search"
-              className="text-gray-300 hover:text-gray-100 font-medium"
-            >
-              Search
+      <header className="bg-gray-800 px-6 py-3">
+        <div className="max-w-full mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-6">
+            <Link to="/" className="text-xl font-bold text-blue-400">
+              Unofficial
+              <span className="text-white font-medium">AniListLocal</span>
             </Link>
-            <Link
-              to="/lists"
-              className="text-gray-300 hover:text-gray-100 font-medium"
-            >
-              My Lists
-            </Link>
-
+            <nav className="flex items-start space-x-6">
+              <Link
+                to="/search"
+                className="text-gray-300 hover:text-gray-100 font-medium"
+              >
+                Search
+              </Link>
+              <Link
+                to="/lists"
+                className="text-gray-300 hover:text-gray-100 font-medium"
+              >
+                My Lists
+              </Link>
+            </nav>
+          </div>
+          <nav className="flex space-x-6 items-center">
             {user ? (
-              <div className="flex items-center space-x-3">
+              <div className="flex group relative gap-2 items-center">
                 {user.avatar.medium && (
                   <img
                     alt={user.name}
-                    className="w-7 h-7 rounded-full"
+                    className="w-7 h-7"
                     src={user.avatar.medium}
                   />
                 )}
-                <span className="text-gray-300 font-medium">{user.name}</span>
-                <a
-                  className="bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded text-sm font-medium"
-                  href="http://localhost:8000/auth/logout"
-                >
-                  Logout
-                </a>
+                <ChevronDown className="text-gray-300 cursor-pointer"></ChevronDown>
+                <UserMenu user={user}></UserMenu>
               </div>
             ) : (
               <a

@@ -1,22 +1,28 @@
+import React from "react";
+import type { MediaStats } from "../types";
 import {
-  Bar,
   BarChart,
-  ResponsiveContainer,
-  Tooltip,
+  Bar,
   XAxis,
   YAxis,
+  Tooltip,
+  ResponsiveContainer,
 } from "recharts";
-import type { MediaStats } from "../types";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "../components/ui/card";
 
-interface ScoreDistributionProps {
+interface StatusDistributionProps {
   stats: MediaStats | null;
 }
 
-const ScoreDistribution = ({ stats }: ScoreDistributionProps) => {
+const StatusDistribution = ({ stats }: StatusDistributionProps) => {
   const data =
-    stats?.scoreDistribution?.map((item) => ({
-      label: item.score,
+    stats?.statusDistribution?.map((item) => ({
+      label: item.status,
       value: item.amount,
     })) ?? [];
 
@@ -24,7 +30,7 @@ const ScoreDistribution = ({ stats }: ScoreDistributionProps) => {
     <Card className="w-1/2 bg-gray-900">
       <CardHeader>
         <CardTitle className="text-center text-gray-300">
-          Score Distribution
+          Status Distribution
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -43,4 +49,4 @@ const ScoreDistribution = ({ stats }: ScoreDistributionProps) => {
   );
 };
 
-export default ScoreDistribution;
+export default StatusDistribution;
