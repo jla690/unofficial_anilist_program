@@ -14,7 +14,7 @@ Features include login, anime & manga list management, searching, recommendation
 - Profile dropdown/menu
 - Status and score distribution graphs
 - Docker setup (WIP)
-- Responsive UI (Tailwind CSS)
+- Modern UI
 
 ## TODO
 
@@ -31,9 +31,10 @@ Features include login, anime & manga list management, searching, recommendation
 ## Getting Started
 
 1. Clone the repo.
-2. Run backend (`FastAPI`) and frontend (`Vite/React`).
-3. Visit [localhost] in your browser.
-4. Authenticate using AniList.
+2. In the main directory, run `uvicorn app.main:app --reload`
+3. In app/frontend run `npm install` then `npm run dev`
+4. Visit [localhost:5137] in your browser.
+5. Authenticate using AniList.
 
 ## Screenshots
 TODO
