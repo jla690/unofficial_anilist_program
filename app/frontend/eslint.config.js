@@ -72,6 +72,12 @@ export default defineConfig([
 
       // Custom tweaks
       'react/react-in-jsx-scope': 'off',
+
+      // Allow longer lines for className attributes
+      'max-len': ['error', {
+        code: 100,
+        ignorePattern: 'className=|class='
+      }],
     },
   },
 ])
