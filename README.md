@@ -32,7 +32,7 @@ Features include login, anime & manga list management, searching, recommendation
 
 1. Clone the repo.
 2. In the main directory, run `uvicorn app.main:app --reload`
-3. In app/frontend run `npm install` then `npm run dev`
+3. In another terminal window, go to app/frontend and run `npm run dev`
 4. Visit `localhost:5137` in your browser.
 5. Authenticate using AniList.
 
