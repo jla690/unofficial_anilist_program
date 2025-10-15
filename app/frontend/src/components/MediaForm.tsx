@@ -31,7 +31,7 @@ const MediaForm = ({
       <div>
         <label
           htmlFor="episodeId"
-          className="mx-2 block text-sm font-medium mb-1 text-left pl-5"
+          className="mx-2 block text-sm font-medium mb-1 text-left pl-5 cursor-auto"
         >
           Chapters/Episodes:
         </label>
@@ -53,7 +53,7 @@ const MediaForm = ({
       {/* Status */}
       <div>
         <label
-          className="mx-2 block text-sm font-medium mb-1 text-left pl-5"
+          className="mx-2 block text-sm font-medium mb-1 text-left pl-5 cursor-auto"
           htmlFor="statusId"
         >
           Status:
@@ -78,7 +78,7 @@ const MediaForm = ({
       {/* Score */}
       <div className="">
         <label
-          className="mx-2 block text-sm font-medium mb-1 text-left pl-5"
+          className="mx-2 block text-sm font-medium mb-1 text-left pl-5 cursor-auto"
           htmlFor="scoreId"
         >
           Score:

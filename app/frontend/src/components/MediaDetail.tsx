@@ -158,7 +158,7 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
 
           {/* Genre badges */}
           <div className="mb-8">
-            <label className="flex justify-center gap-2 font-medium text-bold text-gray-300">
+            <label className="flex justify-center gap-2 font-medium text-bold text-gray-300 cursor-auto">
               Genres:
               {media?.media.genres && (
                 <p className="genres">
