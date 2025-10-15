@@ -1,22 +1,43 @@
-Unofficial Anilist website local page using FastAPI/React/Tailwind CSS for learning purposes.
+# Unofficial AniList Program
 
-DONE:
-- Logging in
-- Checking user list of manga and anime
-- Searching
-- Saving title specific (progress, status, score)
-- Details of titles
-- Converting to React/Typescript/Tailwind
-- Logging out functionality
-- List of recommendations
-- List of characters
-- docker is somewhat working... (reload doesn't work on vite)
-- Status and score distribution graph
-- List of media tags
-- Profile dropdown menu
+A learning project: an unofficial, local AniList web client built with FastAPI (backend), React + TypeScript + Tailwind CSS (frontend).  
+Features include login, anime & manga list management, searching, recommendations, graphs, and more.
 
-TODO:
-- Show trending media for anime and manga with thumbnails (don't think this is possible)
-- use redis (not sure if this is worth implementing)
-- filtering for list/search
-- 
+## Features
+
+- AniList authentication (login/logout)
+- View user anime/manga lists
+- Search for anime/manga
+- Update progress, status, and score for specific titles
+- View detailed title info (characters, tags, distribution graphs)
+- Recommendations and character lists
+- Profile dropdown/menu
+- Status and score distribution graphs
+- Docker setup (WIP)
+- Responsive UI (Tailwind CSS)
+
+## TODO
+
+- Trending anime & manga display with thumbnails
+- Redis integration for caching (researching usefulness)
+
+## Tech Stack
+
+- **Backend:** FastAPI (Python)
+- **Frontend:** React, TypeScript, Tailwind CSS
+- **API:** AniList GraphQL
+- **DevOps:** Docker (WIP)
+
+## Getting Started
+
+1. Clone the repo.
+2. Run backend (`FastAPI`) and frontend (`Vite/React`).
+3. Visit [localhost] in your browser.
+4. Authenticate using AniList.
+
+## Screenshots
+TODO
+
+## License
+
+MIT
