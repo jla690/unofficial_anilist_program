@@ -17,7 +17,7 @@ const Home = ({ user }: HomeProps) => {
         </h1>
         <p className="text-gray-300 mb-8 max-w-lg mx-auto">
           A personal dashboard to search, track, and manage your anime & manga
-          lists locally.
+          lists locally using the AniList API.
         </p>
         {!user && (
           <a
