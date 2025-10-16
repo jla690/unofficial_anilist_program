@@ -38,7 +38,3 @@ Features include login, anime & manga list management, searching, recommendation
 
 ## Screenshots
 TODO
-
-## License
-
-MIT
