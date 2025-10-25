@@ -242,6 +242,27 @@ mutation Mutation($mediaId: Int, $score: Float, $progress: Int, $status: MediaLi
 }
 """
 
+TRENDING_QUERY ="""
+query($type: MediaType) {
+  Page(page: 1, perPage: 20) {
+    media(sort: TRENDING_DESC, type: $type) {
+      id
+      title {
+        romaji
+        english
+      }
+      coverImage {
+        large
+        medium
+      }
+      description
+      siteUrl
+      averageScore
+    }
+  }
+}
+"""
+
 # Gets current user from the request
 def get_current_user(request: Request):
     return request.session.get("user")
@@ -444,6 +465,14 @@ def handle_progress(request, media_id):
         return None
     return response.json()["data"]["MediaList"]
 
+def handle_trending(request, type):
+    variables = {}
+    variables["type"] = type
+    response = api_call(TRENDING_QUERY, None, variables)
+    if response is None:
+        return None
+    return response.json()["data"]["Page"]
+
 
 
 app = FastAPI(debug=True)
@@ -468,9 +497,13 @@ app.add_middleware(
 @app.get("/")
 async def home(request: Request):
     user_data = get_current_user(request)
+    trending_manga = handle_trending(request, "MANGA")
+    trending_anime = handle_trending(request, "ANIME")
 
     return {
-        "user": user_data
+        "user": user_data,
+        "trending_manga": trending_manga,
+        "trending_anime": trending_anime
     }
 
 @app.get("/auth/userdata")

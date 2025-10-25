@@ -116,3 +116,18 @@ export interface Tag {
   name: string;
   rank: number;
 }
+
+export interface TrendingMedia {
+  id: number;
+  title: {
+    romaji: string;
+    english: string;
+  };
+  coverImage: {
+    large: string;
+    medium: string;
+  };
+  description: string;
+  siteUrl: string;
+  averageScore: number;
+}
