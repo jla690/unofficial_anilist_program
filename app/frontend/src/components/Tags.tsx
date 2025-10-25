@@ -13,7 +13,7 @@ const Tags = ({ tags }: TagsProps) => {
         tags.map((tag) => (
           <section
             key={tag.name}
-            className="bg-gray-700 flex justify-between mx-3 my-2 px-2 rounded-md text-gray-300 hover:text-blue-400 transition duration-300"
+            className="bg-slate-600 flex justify-between mx-3 my-2 px-2 rounded-md text-gray-300 hover:text-blue-400 transition duration-300"
           >
             <div>{tag.name}</div>
             <div className="">{tag.rank + "%"}</div>

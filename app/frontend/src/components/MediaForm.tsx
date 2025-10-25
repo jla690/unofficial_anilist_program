@@ -37,10 +37,10 @@ const MediaForm = ({
         </label>
         <input
           id="episodeId"
-          className="bg-gray-700 px-1 w-[11.75rem] rounded-md block mx-auto text-gray-300"
+          className="bg-slate-600 px-1 w-[11.75rem] rounded-md block mx-auto text-gray-300"
           type="number"
           name="progress"
-          placeholder="Progress"
+          placeholder=""
           min={0}
           value={progress ?? ""}
           onChange={(e) => {
@@ -60,7 +60,7 @@ const MediaForm = ({
         </label>
         <select
           id="statusId"
-          className="bg-gray-700 w-[11.75rem] rounded-sm block mx-auto appearance-none text-gray-300"
+          className="bg-slate-600 w-[11.75rem] rounded-sm block mx-auto appearance-none text-gray-300"
           name="status"
           value={status ?? ""}
           onChange={(e) => setStatus(e.target.value)}
@@ -85,10 +85,10 @@ const MediaForm = ({
         </label>
         <input
           id="scoreId"
-          className="bg-gray-700 px-1 w-[11.75rem] rounded-sm block mx-auto text-gray-300"
+          className="bg-slate-600 px-1 w-[11.75rem] rounded-sm block mx-auto text-gray-300"
           type="number"
           name="score"
-          placeholder="Score"
+          placeholder=""
           min={0}
           max={10}
           step={1}

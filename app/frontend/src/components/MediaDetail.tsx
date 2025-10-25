@@ -126,6 +126,12 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
               media?.media.title.native ||
               ""}
           </h1>
+          <h2 className="text-gray-300 text-center">
+            {media?.media.title.romaji}
+          </h2>
+          <h2 className="text-gray-300 text-center">
+            {media?.media.title.native}
+          </h2>
 
           {/* Badges */}
           <div className="flex justify-center gap-2">

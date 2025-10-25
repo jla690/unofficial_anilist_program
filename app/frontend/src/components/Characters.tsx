@@ -8,8 +8,8 @@ interface CharacterProps {
 
 const Characters = ({ characters }: CharacterProps) => {
   return (
-    <div>
-      <h1 className="font-bold text-center text-xl mt-5">Characters</h1>
+    <div className="overflow-auto mt-5">
+      <h1 className="font-bold text-center text-xl my-5">Characters</h1>
       <div className="grid grid-cols-6">
         {characters?.map((character, idx) => (
           <CharacterCard key={idx} character={character}></CharacterCard>
