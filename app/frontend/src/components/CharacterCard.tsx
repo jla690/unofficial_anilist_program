@@ -10,7 +10,7 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
       <div className="bg-slate-600 dark:bg-gray-800 rounded-sm shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl hover:scale-105">
         <div className="relative aspect-[3/4] overflow-hidden">
           <img
-            className="rounded-sm shadow-gray-900 shadow-lg transition duration-300 ease-in-out"
+            className="w-full h-full object-cover rounded-sm transition duration-300 ease-in-out"
             alt="CharacterImage"
             src={character.image}
           ></img>
