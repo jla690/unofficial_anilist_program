@@ -120,21 +120,22 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
 
         {/* Title */}
         <div className="col-span-7">
-          <h1 className="text-center font-bold mb-5 mt-5 text-3xl px-5 text-gray-300">
+          <h1 className="text-left font-bold mb-5 mt-5 text-3xl px-5 text-gray-300">
             {media?.media.title.english ||
               media?.media.title.romaji ||
               media?.media.title.native ||
               ""}
           </h1>
-          <h2 className="text-gray-300 text-center">
-            {media?.media.title.romaji}
-          </h2>
-          <h2 className="text-gray-300 text-center">
-            {media?.media.title.native}
-          </h2>
+          <div className="mb-5 px-5">
+            <h2 className="text-gray-400 text-left">
+              {media?.media.title.english && `${media.media.title.english}, `}
+              {media?.media.title.romaji && `${media.media.title.romaji}, `}
+              {media?.media.title.native}
+            </h2>
+          </div>
 
           {/* Badges */}
-          <div className="flex justify-center gap-2">
+          <div className="flex gap-2 mx-5">
             {
               <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 text-gray-100">
                 {"SITE SCORE: " + (media?.media.meanScore ?? "N/A")}
@@ -156,21 +157,21 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
           </div>
 
           {/* Description */}
-          <p className="mt-8 mb-8 mx-8 text-left bg-gray-700 rounded-sm px-5 py-5 text-gray-300">
+          <p className="mt-8 mb-8 mx-5 text-left bg-gray-700 rounded-sm px-5 py-5 text-gray-300">
             {media?.media.description
               ? media?.media.description.replace(/<[^>]+>/g, "")
               : "No description available."}
           </p>
 
           {/* Genre badges */}
-          <div className="mb-8">
-            <label className="flex justify-center gap-2 font-medium text-bold text-gray-300 cursor-auto">
+          <div className="mb-2">
+            <label className="flex mx-5 gap-2 font-medium text-bold text-gray-300 cursor-auto">
               Genres:
               {media?.media.genres && (
                 <p className="genres">
                   {media.media.genres.map((g) => (
                     <span
-                      className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 justify-center mx-1 mb-5 text-white"
+                      className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-500 justify-center mx-1 mb-2 text-white"
                       key={g}
                     >
                       {g}
@@ -181,47 +182,50 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
             </label>
           </div>
 
-          <div className="flex justify-center text-gray-300">
+          <div className="flex mx-5 text-gray-300">
             {/* Episodes, might get rid of this */}
-            <p className="mb-6 mx-5">
-              {media?.media.episodes && (
-                <div className="font-medium">
-                  {"Episodes: " + media?.media.episodes}
-                </div>
-              )}
-              {media?.media.chapters && (
-                <span>
-                  {" "}
-                  <strong>Chapters:</strong> {media.media.chapters}
-                </span>
-              )}
-              {media?.media.volumes && (
-                <span>
-                  {" "}
-                  <strong>Volumes:</strong> {media.media.volumes}
-                </span>
-              )}
-            </p>
-
-            {/* AniList link */}
-            {media?.media.siteUrl && (
-              <p>
-                <a
-                  className="text-blue-500 hover:text-blue-600 font-medium"
-                  href={media.media.siteUrl}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  View on AniList →
-                </a>
+            {(media?.media.episodes ||
+              media?.media.chapters ||
+              media?.media.volumes) && (
+              <p className="mb-2 mr-6">
+                {media?.media.episodes && (
+                  <div className="font-medium">
+                    {"Episodes: " + media?.media.episodes}
+                  </div>
+                )}
+                {media?.media.chapters && (
+                  <span>
+                    {" "}
+                    <strong>Chapters:</strong> {media.media.chapters}
+                  </span>
+                )}
+                {media?.media.volumes && (
+                  <span>
+                    {" "}
+                    <strong>Volumes:</strong> {media.media.volumes}
+                  </span>
+                )}
               </p>
             )}
           </div>
+          {/* AniList link */}
+          {media?.media.siteUrl && (
+            <p className="mb-5 mt-5">
+              <a
+                className="text-blue-500 hover:text-blue-600 font-medium mx-5"
+                href={media.media.siteUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                View on AniList →
+              </a>
+            </p>
+          )}
         </div>
       </article>
 
       {/* Forms */}
-      <section className="mt-5 grid grid-cols-10 text-gray-300">
+      <section className="mt-5 grid grid-cols-10 text-gray-300 h-auto">
         <div className="col-span-2 bg-gray-800 rounded-sm">
           <MediaForm
             setProgress={setProgress}
