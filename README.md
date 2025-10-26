@@ -15,11 +15,12 @@ Features include login, anime & manga list management, searching, recommendation
 - Status and score distribution graphs
 - Docker setup (WIP)
 - Modern UI
+- Trending anime & manga display with thumbnails
 
 ## TODO
 
-- Trending anime & manga display with thumbnails
-- Redis integration for caching (researching usefulness)
+- Redis integration for caching (probably not viable)
+- Banner image for media details
 
 ## Tech Stack
 
