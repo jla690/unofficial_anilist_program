@@ -60,7 +60,7 @@ const MediaForm = ({
         </label>
         <select
           id="statusId"
-          className="bg-slate-600 w-[11.75rem] rounded-sm block mx-auto appearance-none text-gray-300"
+          className="bg-slate-600 w-[11.75rem] rounded-sm block mx-auto appearance-none text-gray-300 px-1"
           name="status"
           value={status ?? ""}
           onChange={(e) => setStatus(e.target.value)}
