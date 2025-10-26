@@ -128,9 +128,13 @@ const MediaDetail = ({ user }: MediaDetailProps) => {
           </h1>
           <div className="mb-5 px-5">
             <h2 className="text-gray-400 text-left">
-              {media?.media.title.english && `${media.media.title.english}, `}
-              {media?.media.title.romaji && `${media.media.title.romaji}, `}
-              {media?.media.title.native}
+              {[
+                media?.media.title.english,
+                media?.media.title.romaji,
+                media?.media.title.native,
+              ]
+                .filter(Boolean)
+                .join(", ")}
             </h2>
           </div>
 
