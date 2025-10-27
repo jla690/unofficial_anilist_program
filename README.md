@@ -3,6 +3,27 @@
 A learning project: an unofficial, local AniList web client built with FastAPI (backend), React + TypeScript + Tailwind CSS (frontend).  
 Features include login, anime & manga list management, searching, recommendations, graphs, and more.
 
+### Home Page - Logged Out
+![Logged out](/docs/logged_out_front_page.png)
+
+### Home Page - Logged In
+![Logged in](/docs/logged_in_front_page.png)
+
+### Search Feature
+![Search](/docs/search.png)
+
+### Manga List
+![Manga List](/docs/manga_list.png)
+
+### Anime List
+![Anime List](/docs/anime_list.png)
+
+### Media Details
+![Media Detail](/docs/media_detail.png)
+
+### User Profile Dropdown
+![Dropdown](/docs/user_dropdown.png)
+
 ## Features
 
 - AniList authentication (login/logout)
@@ -21,6 +42,8 @@ Features include login, anime & manga list management, searching, recommendation
 
 - Redis integration for caching (probably not viable)
 - Banner image for media details
+- Settings (not sure if possible)
+- Profile page
 
 ## Tech Stack
 
