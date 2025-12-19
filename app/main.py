@@ -29,6 +29,8 @@ REDIRECT_URL = os.getenv("REDIRECT_URL", "http://localhost:8000/auth/callback")
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 TOKEN_PATH = BASE_DIR / "token.json"
 
+print(os.environ)
+
 origins = [
     FRONTEND_URL
     # Add more origins here
