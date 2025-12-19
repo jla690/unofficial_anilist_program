@@ -5,6 +5,8 @@ interface UserMenuProps {
   user: User | null;
 }
 
+const API_URL = import.meta.env.VITE_API_URL || "/api";
+
 const UserMenu = ({ user }: UserMenuProps) => {
   return (
     <div className="absolute top-full origin-top opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 bg-gray-800 shadow-md rounded-md mt-5 w-40 right-0 transition duration-300 text-gray-300 divide-y divide-gray-600 border border-gray-600">
@@ -19,7 +21,7 @@ const UserMenu = ({ user }: UserMenuProps) => {
         Settings (WIP)
       </a>
       <a
-        href="http://localhost:8000/auth/logout"
+        href={`${API_URL}/auth/logout`}
         className="block px-4 py-2 hover:bg-gray-700 rounded-b-md"
       >
         Logout

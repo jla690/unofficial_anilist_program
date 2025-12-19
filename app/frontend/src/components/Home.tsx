@@ -10,6 +10,8 @@ interface HomeProps {
   messages?: { text: string; category?: string }[];
 }
 
+const API_URL = import.meta.env.VITE_API_URL || "/api";
+
 const Home = ({ user }: HomeProps) => {
   const [manga, setManga] = useState<TrendingMedia[] | null>(null);
   const [anime, setAnime] = useState<TrendingMedia[] | null>(null);
@@ -43,7 +45,7 @@ const Home = ({ user }: HomeProps) => {
           <div className="mb-5">
             <a
               className="bg-blue-600 hover:bg-blue-700 text-gray-300 px-6 py-4 rounded font-medium"
-              href="http://localhost:8000/auth/login"
+              href={`${API_URL}/auth/login`}
             >
               Login with AniList
             </a>

@@ -10,6 +10,8 @@ interface BaseLayoutProps {
   messages?: { text: string; category?: string }[];
 }
 
+const API_URL = import.meta.env.VITE_API_URL || "/api";
+
 const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
   return (
     <div className="min-h-screen bg-gray-900">
@@ -52,7 +54,7 @@ const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
             ) : (
               <a
                 className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-medium"
-                href="http://localhost:8000/auth/login"
+                href={`${API_URL}/auth/login`}
               >
                 Login
               </a>
