@@ -478,7 +478,7 @@ def handle_trending(request, type):
 
 app = FastAPI(debug=True)
 
-app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+# app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 
 app.add_middleware(
     CORSMiddleware,
