@@ -1,17 +1,21 @@
 {
+  "version": 2,
   "buildCommand": "cd app/frontend && npm install && npm run build",
   "outputDirectory": "app/frontend/dist",
-  "installCommand": "pip install -r requirements.txt",
-  "devCommand": "cd app && python -m uvicorn main:app --host 0.0.0.0 --port 8000",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/index"
+      "src": "api/index.py",
+      "use": "@vercel/python"
     }
   ],
-  "functions": {
-    "api/index.py": {
-      "runtime": "python3.9"
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "app/frontend/dist/$1"
     }
-  }
+  ]
 }
