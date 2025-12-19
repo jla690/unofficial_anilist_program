@@ -1,90 +1,81 @@
-import { type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import type { User } from "../types";
-import UserMenu from "./UserMenu";
-import { ChevronDown } from "lucide-react";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { LogOut } from "lucide-react";
+import { useState } from "react";
+
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 interface BaseLayoutProps {
-  user: User | null;
-  children?: ReactNode;
-  messages?: { text: string; category?: string }[];
+  children: React.ReactNode;
 }
 
-const BaseLayout = ({ user, children, messages }: BaseLayoutProps) => {
+export function BaseLayout({ children }: BaseLayoutProps) {
+  const { user, logout } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900">
-      {/* Header */}
-      <header className="bg-gray-800 px-6 py-3">
-        <div className="max-w-full mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-6">
-            <Link to="/" className="text-xl font-bold text-blue-400">
-              Unofficial
-              <span className="text-white font-medium">AniListLocal</span>
-            </Link>
-            <nav className="flex items-start space-x-6">
-              <Link
-                to="/search"
-                className="text-gray-300 hover:text-gray-100 font-medium"
-              >
-                Search
+    <div className="min-h-screen flex flex-col">
+      <header className="border-b">
+        <div className="container mx-auto px-4 py-4">
+          <nav className="flex items-center justify-between">
+            <div className="flex items-center gap-8">
+              <Link to="/" className="text-xl font-bold">
+                AniList Tracker
               </Link>
-              <Link
-                to="/lists"
-                className="text-gray-300 hover:text-gray-100 font-medium"
-              >
-                My Lists
-              </Link>
-            </nav>
-          </div>
-          <nav className="flex space-x-6 items-center">
-            {user ? (
-              <div className="flex group relative gap-2 items-center">
-                {user.avatar.medium && (
-                  <img
-                    alt={user.name}
-                    className="w-7 h-7"
-                    src={user.avatar.medium}
-                  />
-                )}
-                <ChevronDown className="text-gray-300 cursor-pointer"></ChevronDown>
-                <UserMenu user={user}></UserMenu>
-              </div>
-            ) : (
-              <a
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-medium"
-                href="http://localhost:8000/auth/login"
-              >
-                Login
-              </a>
-            )}
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link to="/" className="px-4 py-2 hover:bg-accent rounded-md">
+                        Home
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+            </div>
+            <div>
+              {user ? (
+                <div className="flex items-center gap-4">
+                  <span className="text-sm text-muted-foreground">
+                    {user.name}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    {isLoggingOut ? "Logging out..." : "Logout"}
+                  </Button>
+                </div>
+              ) : (
+                <Button asChild>
+                  <a href={`${API_URL}/auth/login`}>Login with AniList</a>
+                </Button>
+              )}
+            </div>
           </nav>
         </div>
       </header>
-
-      {/* Main Layout */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-1 gap-6 px-6 py-8">
-        <main>
-          {messages && messages.length > 0 && (
-            <div className="mb-6 space-y-2">
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`p-3 rounded ${
-                    m.category === "error"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-blue-100 text-blue-700"
-                  }`}
-                >
-                  {m.text}
-                </div>
-              ))}
-            </div>
-          )}
-          {children}
-        </main>
-      </div>
+      <main className="flex-1">{children}</main>
     </div>
   );
-};
-
-export default BaseLayout;
+}
