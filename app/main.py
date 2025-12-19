@@ -22,11 +22,11 @@ LOGIN_URL = (
 GRAPHQL_URL = "https://graphql.anilist.co"
 TOKEN_URL = "https://anilist.co/api/v2/oauth/token"
 FILE_PATH = BASE_DIR / "data.json"
-client_id = int(os.getenv("ANILIST_CLIENT_ID"))
-client_secret = os.getenv("ANILIST_CLIENT_SECRET")
-SECRET_KEY = os.getenv("SECRET_KEY")
-REDIRECT_URL = os.getenv("REDIRECT_URL")
-FRONTEND_URL = os.getenv("FRONTEND_URL")
+client_id = int(os.getenv("ANILIST_CLIENT_ID", "0"))
+client_secret = os.getenv("ANILIST_CLIENT_SECRET", "")
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key-change-me")
+REDIRECT_URL = os.getenv("REDIRECT_URL", "http://localhost:8000/auth/callback")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 TOKEN_PATH = BASE_DIR / "token.json"
 
 origins = [
