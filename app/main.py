@@ -25,13 +25,12 @@ FILE_PATH = BASE_DIR / "data.json"
 client_id = int(os.getenv("ANILIST_CLIENT_ID"))
 client_secret = os.getenv("ANILIST_CLIENT_SECRET")
 SECRET_KEY = os.getenv("SECRET_KEY")
-REDIRECT_URL = os.getenv("REDIRECT_URL", "http://localhost:8000/auth/callback")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+REDIRECT_URL = os.getenv("REDIRECT_URL")
+FRONTEND_URL = os.getenv("FRONTEND_URL")
 TOKEN_PATH = BASE_DIR / "token.json"
 
 origins = [
-    FRONTEND_URL,
-    "http://localhost:5173",
+    FRONTEND_URL
     # Add more origins here
 ]
 
