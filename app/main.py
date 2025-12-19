@@ -15,11 +15,6 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
 
-origins = [
-    "http://localhost:5173",
-    # Add more origins here
-]
-
 load_dotenv()
 LOGIN_URL = (
     "https://anilist.co/api/v2/oauth/authorize?client_id={client_id}"
@@ -30,8 +25,15 @@ FILE_PATH = BASE_DIR / "data.json"
 client_id = int(os.getenv("ANILIST_CLIENT_ID"))
 client_secret = os.getenv("ANILIST_CLIENT_SECRET")
 SECRET_KEY = os.getenv("SECRET_KEY")
-REDIRECT_URL = "http://localhost:8000/auth/callback"
+REDIRECT_URL = os.getenv("REDIRECT_URL", "http://localhost:8000/auth/callback")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 TOKEN_PATH = BASE_DIR / "token.json"
+
+origins = [
+    FRONTEND_URL,
+    "http://localhost:5173",
+    # Add more origins here
+]
 
 USER_QUERY = """
 query {
@@ -534,7 +536,7 @@ async def search_route(request: Request):
     }
 
 @app.get("/auth/logout")
-async def logout(request: Request, redirect = "http://localhost:5173/"):
+async def logout(request: Request, redirect = FRONTEND_URL):
     if "token" in request.session:
         del request.session["token"]
     if "user" in request.session:
@@ -544,7 +546,7 @@ async def logout(request: Request, redirect = "http://localhost:5173/"):
 
 # Callback url to get token
 @app.get("/auth/callback")
-async def callback(request: Request, redirect = "http://localhost:5173/"):
+async def callback(request: Request, redirect = FRONTEND_URL):
     code = request.query_params.get("code")
     if not code:
         return {
