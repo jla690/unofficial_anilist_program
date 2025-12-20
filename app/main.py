@@ -487,7 +487,7 @@ app.add_middleware(
     secret_key=SECRET_KEY,
     cookie_name="session",
     backend_type=BackendType.cookie,
-    cookie_https_only=False,  # Set to True in production
+    https_only=False,  # Changed from cookie_https_only
 )
 
 app.add_middleware(
