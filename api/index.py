@@ -1,7 +1,7 @@
-"""
-Vercel serverless handler for FastAPI application
-"""
-from app.main import app
+from fastapi import FastAPI
 
-# Export the FastAPI app as handler for Vercel
-handler = app
+app = FastAPI()
+
+@app.get("/")
+def hello():
+    return {"ok": True}
