@@ -482,13 +482,13 @@ def handle_trending(request, type):
 
 app = FastAPI(debug=True)
 
-app.add_middleware(
-    CookieSessionMiddleware,
-    secret_key=SECRET_KEY,
-    cookie_name="session",
-    backend_type=BackendType.cookie,
-    https_only=False,  # Changed from cookie_https_only
-)
+# app.add_middleware(
+#     CookieSessionMiddleware,
+#     secret_key=SECRET_KEY,
+#     cookie_name="session",
+#     backend_type=BackendType.cookie,
+#     https_only=False,  # Changed from cookie_https_only
+# )
 
 app.add_middleware(
     CORSMiddleware,
