@@ -3,8 +3,8 @@
   "outputDirectory": "app/frontend/dist",
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "/api"
+      "source": "/api/(.*)",
+      "destination": "/api/index"
     }
   ]
 }
