@@ -7,6 +7,8 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import RedirectResponse
+from starlette_session import SessionMiddleware as CookieSessionMiddleware
+from starlette_session. backends import BackendType
 
 import uvicorn
 
@@ -29,7 +31,7 @@ REDIRECT_URL = os.getenv("REDIRECT_URL", "http://localhost:8000/auth/callback")
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 TOKEN_PATH = BASE_DIR / "token.json"
 
-print(os.environ)
+
 
 origins = [
     FRONTEND_URL
@@ -480,7 +482,13 @@ def handle_trending(request, type):
 
 app = FastAPI(debug=True)
 
-# app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+app.add_middleware(
+    CookieSessionMiddleware,
+    secret_key=SECRET_KEY,
+    cookie_name="session",
+    backend_type=BackendType.cookie,
+    cookie_https_only=False,  # Set to True in production
+)
 
 app.add_middleware(
     CORSMiddleware,
