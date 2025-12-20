@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import RedirectResponse
 from starlette_session import SessionMiddleware as CookieSessionMiddleware
-from starlette_session. backends import BackendType
+from starlette_session.backends import BackendType
 
 import uvicorn
 
